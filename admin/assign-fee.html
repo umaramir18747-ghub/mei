@@ -7,7 +7,991 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <link rel="stylesheet" href="../components.css">
   <link rel="stylesheet" href="../responsive-components.css">
-  <link rel="stylesheet" href="fee.css">
+  <style>
+    /* ============================================
+       INTERNAL CSS - Unified Design System
+       Based on: enroll.css / fee.css / view-details.css
+       Blue Theme | Full Width | Responsive
+       ============================================ */
+
+    /* ===== RESET & BASE ===== */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Segoe UI', system-ui, Roboto, sans-serif;
+    }
+
+    body {
+      background: #f8fafc;
+      color: #1e293b;
+      line-height: 1.6;
+    }
+
+    /* ===== MAIN PANEL ===== */
+    .main-panel {
+      flex: 1;
+      padding: 40px 32px;
+      background: #f8fafc;
+      min-height: calc(100vh - 70px);
+    }
+
+    /* ===== PAGE HEADER ===== */
+    .page-header {
+      background: white;
+      padding: 24px 32px;
+      margin-bottom: 28px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.04);
+      border: 1px solid #e9eef3;
+    }
+
+    .page-header h1 {
+      font-size: 28px;
+      font-weight: 700;
+      background: linear-gradient(135deg, #1e3a8a, #2563eb);
+      background-clip: text;
+      -webkit-background-clip: text;
+      color: transparent;
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+
+    .page-header h1 i {
+      color: #2563eb;
+      background: none;
+      -webkit-text-fill-color: #2563eb;
+    }
+
+    .page-header p {
+      color: #475569;
+      margin-top: 8px;
+      font-size: 15px;
+      border-left: 3px solid #3b82f6;
+      padding-left: 16px;
+    }
+
+    /* ===== CARDS ===== */
+    .card {
+      background: white;
+      padding: 32px;
+      box-shadow: 0 4px 25px rgba(0, 0, 0, 0.07);
+      border: 1px solid #f1f5f9;
+      margin-bottom: 28px;
+    }
+
+    .card-title {
+      font-size: 19px;
+      font-weight: 700;
+      color: #1e293b;
+      margin-bottom: 24px;
+      padding-bottom: 16px;
+      border-bottom: 2px solid #e5e7eb;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    .card-title-left {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    .card-title i {
+      color: #2563eb;
+      font-size: 22px;
+    }
+
+    /* ===== BADGE COUNTER ===== */
+    .badge-counter {
+      background: #eef2ff;
+      padding: 4px 14px;
+      font-size: 13px;
+      font-weight: 700;
+      color: #1e40af;
+      border-radius: 0;
+      white-space: nowrap;
+    }
+
+    /* ===== FORM GRIDS ===== */
+    .form-grid-5cols {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 24px;
+    }
+
+    .form-grid-3cols {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 24px;
+    }
+
+    /* ===== FORM GROUPS ===== */
+    .form-group {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .form-group label {
+      font-size: 14px;
+      font-weight: 600;
+      color: #334155;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .form-group label i {
+      color: #2563eb;
+      width: 18px;
+      text-align: center;
+    }
+
+    .req {
+      color: #ef4444;
+      margin-left: 3px;
+    }
+
+    /* ===== FORM CONTROLS ===== */
+    .form-control {
+      padding: 12px 14px;
+      border: 1.5px solid #e2e8f0;
+      border-radius: 0;
+      font-size: 14.5px;
+      color: #1e293b;
+      transition: all 0.25s;
+      background: white;
+      width: 100%;
+    }
+
+    .form-control:focus {
+      outline: none;
+      border-color: #3b82f6;
+      box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.12);
+    }
+
+    .form-control:disabled {
+      background: #f8fafc;
+      color: #64748b;
+      cursor: not-allowed;
+    }
+
+    select.form-control {
+      cursor: pointer;
+      appearance: none;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%2364748b' d='M6 8L1 3h10z'/%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-position: right 14px center;
+      padding-right: 40px;
+    }
+
+    /* ===== FEE TYPE INPUT GROUP (datalist style) ===== */
+    .fee-type-wrap {
+      position: relative;
+      width: 100%;
+    }
+
+    .fee-type-wrap input {
+      padding-right: 36px;
+    }
+
+    .fee-type-toggle {
+      position: absolute;
+      right: 8px;
+      top: 50%;
+      transform: translateY(-50%);
+      background: none;
+      border: none;
+      color: #94a3b8;
+      cursor: pointer;
+      font-size: 13px;
+      padding: 6px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: color 0.2s;
+    }
+
+    .fee-type-toggle:hover {
+      color: #2563eb;
+    }
+
+    .fee-type-menu {
+      position: absolute;
+      top: calc(100% + 4px);
+      left: 0;
+      right: 0;
+      background: white;
+      border: 1.5px solid #e2e8f0;
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
+      z-index: 100;
+      max-height: 220px;
+      overflow-y: auto;
+      display: none;
+    }
+
+    .fee-type-menu.open {
+      display: block;
+    }
+
+    .fee-type-menu button {
+      display: block;
+      width: 100%;
+      text-align: left;
+      padding: 10px 14px;
+      font-size: 14px;
+      color: #1e293b;
+      background: white;
+      border: none;
+      border-bottom: 1px solid #f1f5f9;
+      cursor: pointer;
+      transition: background 0.15s;
+      font-family: inherit;
+    }
+
+    .fee-type-menu button:last-child {
+      border-bottom: none;
+    }
+
+    .fee-type-menu button:hover {
+      background: #eff6ff;
+      color: #1d4ed8;
+    }
+
+    /* ===== QUICK FILL BOX ===== */
+    .quick-fill-box {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      padding: 16px 20px;
+      background: #f8fafc;
+      border: 1.5px solid #e2e8f0;
+      flex-wrap: wrap;
+    }
+
+    .quick-fill-left {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 14px;
+      font-weight: 600;
+      color: #334155;
+    }
+
+    .quick-fill-left i {
+      color: #2563eb;
+      font-size: 18px;
+    }
+
+    .quick-fill-controls {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .quick-fill-input {
+      padding: 10px 14px;
+      border: 1.5px solid #e2e8f0;
+      border-radius: 0;
+      font-size: 14px;
+      color: #1e293b;
+      width: 160px;
+      transition: all 0.25s;
+    }
+
+    .quick-fill-input:focus {
+      outline: none;
+      border-color: #3b82f6;
+      box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.12);
+    }
+
+    /* ===== PILL BUTTONS ===== */
+    .btn-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      padding: 8px 16px;
+      font-size: 13px;
+      font-weight: 600;
+      color: #334155;
+      background: white;
+      border: 1.5px solid #e2e8f0;
+      border-radius: 0;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      white-space: nowrap;
+      text-decoration: none;
+    }
+
+    .btn-pill i {
+      color: #2563eb;
+      font-size: 13px;
+    }
+
+    .btn-pill:hover {
+      background: #f1f5f9;
+      border-color: #cbd5e1;
+      transform: translateY(-1px);
+    }
+
+    .btn-pill.primary {
+      background: #2563eb;
+      color: white;
+      border-color: #2563eb;
+    }
+
+    .btn-pill.primary i {
+      color: white;
+    }
+
+    .btn-pill.primary:hover {
+      background: #1d4ed8;
+      border-color: #1d4ed8;
+      box-shadow: 0 6px 14px rgba(37, 99, 235, 0.25);
+    }
+
+    /* ===== SELECTION TOOLBAR ===== */
+    .selection-toolbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      padding: 14px 20px;
+      background: #f8fafc;
+      border: 1.5px solid #e2e8f0;
+      margin-bottom: 20px;
+      flex-wrap: wrap;
+    }
+
+    .selection-info {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .selection-info strong {
+      font-size: 13.5px;
+      color: #334155;
+      margin-right: 4px;
+    }
+
+    /* ===== STUDENT TABLE WRAPPER ===== */
+    .student-table-wrapper {
+      overflow-x: auto;
+      overflow-y: visible;
+      -webkit-overflow-scrolling: touch;
+      width: 100%;
+      border: 1.5px solid #e2e8f0;
+      margin-bottom: 24px;
+    }
+
+    .student-table-wrapper table {
+      width: 100%;
+      border-collapse: collapse;
+      table-layout: auto;
+      min-width: 100%;
+      white-space: nowrap;
+    }
+
+    /* ===== TABLE HEADERS - BLUE THEME ===== */
+    .student-table-wrapper th {
+      text-align: left;
+      padding: 16px 16px;
+      background: #2563eb;
+      font-weight: 700;
+      font-size: 12.5px;
+      color: white;
+      border-bottom: 2px solid #1d4ed8;
+      text-transform: uppercase;
+      letter-spacing: 0.4px;
+      white-space: nowrap;
+      position: sticky;
+      top: 0;
+      z-index: 10;
+    }
+
+    .student-table-wrapper th i {
+      color: white;
+      margin-right: 6px;
+    }
+
+    .student-table-wrapper td {
+      padding: 14px 16px;
+      border-bottom: 1px solid #f0f2f5;
+      font-size: 14px;
+      vertical-align: middle;
+      white-space: nowrap;
+      color: #1e293b;
+    }
+
+    .student-table-wrapper tr:hover {
+      background: #fafcff;
+    }
+
+    .student-table-wrapper tr.selected-row {
+      background: #eff6ff;
+    }
+
+    .student-table-wrapper tr.selected-row:hover {
+      background: #dbeafe;
+    }
+
+    .student-table-wrapper tbody tr:last-child td {
+      border-bottom: none;
+    }
+
+    /* ===== STUDENT CHECKBOX ===== */
+    .student-checkbox {
+      width: 17px;
+      height: 17px;
+      accent-color: #2563eb;
+      cursor: pointer;
+    }
+
+    /* ===== FEE INPUT ===== */
+    .fee-input {
+      padding: 8px 12px;
+      border: 1.5px solid #e2e8f0;
+      border-radius: 0;
+      font-size: 14px;
+      color: #1e293b;
+      width: 130px;
+      transition: all 0.25s;
+    }
+
+    .fee-input:focus {
+      outline: none;
+      border-color: #3b82f6;
+      box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.12);
+    }
+
+    /* ===== BUTTONS ===== */
+    .btn-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 14px;
+      margin-top: 32px;
+      padding-top: 24px;
+      border-top: 1px solid #e5e7eb;
+    }
+
+    .btn {
+      padding: 12px 26px;
+      border: none;
+      border-radius: 0;
+      font-size: 14.5px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.25s;
+      display: inline-flex;
+      align-items: center;
+      gap: 9px;
+      text-decoration: none;
+    }
+
+    .btn i {
+      color: inherit;
+    }
+
+    .btn-primary {
+      background: #2563eb;
+      color: white;
+    }
+
+    .btn-primary i {
+      color: white;
+    }
+
+    .btn-primary:hover {
+      background: #1d4ed8;
+      transform: translateY(-2px);
+      box-shadow: 0 8px 20px rgba(37, 99, 235, 0.3);
+    }
+
+    .btn-secondary {
+      background: #f8fafc;
+      color: #334155;
+      border: 1.5px solid #e2e8f0;
+    }
+
+    .btn-secondary i {
+      color: #2563eb;
+    }
+
+    .btn-secondary:hover {
+      background: #f1f5f9;
+      border-color: #cbd5e1;
+      transform: translateY(-2px);
+    }
+
+    /* ===== NO STUDENTS NOTICE ===== */
+    #noStudentsNotice {
+      text-align: center;
+      padding: 30px;
+      color: #64748b;
+    }
+
+    #noStudentsNotice i {
+      font-size: 32px;
+      color: #cbd5e1;
+      margin-bottom: 8px;
+    }
+
+    #noStudentsNotice a {
+      color: #2563eb;
+      font-weight: 600;
+      text-decoration: none;
+    }
+
+    #noStudentsNotice a:hover {
+      text-decoration: underline;
+    }
+
+    /* ===== MONTH & YEAR PICKER ===== */
+    .month-year-picker {
+      display: grid;
+      grid-template-columns: 1.4fr 1fr;
+      gap: 8px;
+    }
+
+    .month-year-picker .form-control {
+      padding-right: 36px;
+      cursor: pointer;
+      appearance: none;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%2364748b' d='M6 8L1 3h10z'/%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-position: right 14px center;
+    }
+
+    .month-year-picker .month-select {
+      min-width: 0;
+    }
+
+    .month-year-picker .year-select {
+      min-width: 0;
+      text-align: center;
+      background-image: none;
+    }
+
+    /* ===== TOAST NOTIFICATIONS ===== */
+    .toast-msg {
+      position: fixed;
+      bottom: 30px;
+      right: 30px;
+      background: #1e293b;
+      color: white;
+      padding: 16px 28px;
+      border-radius: 0;
+      font-size: 14.5px;
+      font-weight: 500;
+      z-index: 9999;
+      box-shadow: 0 8px 30px rgba(0, 0, 0, 0.25);
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      animation: slideUp 0.35s ease;
+      max-width: 480px;
+    }
+
+    .toast-msg i {
+      color: #3b82f6;
+      font-size: 18px;
+    }
+
+    .toast-msg.toast-success {
+      background: #065f46;
+    }
+
+    .toast-msg.toast-success i {
+      color: #6ee7b7;
+    }
+
+    @keyframes slideUp {
+      0% {
+        opacity: 0;
+        transform: translateY(40px);
+      }
+      100% {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    /* ============================================
+       RESPONSIVE BREAKPOINTS
+       ============================================ */
+
+    /* ===== LARGE DESKTOP (1200px and below) ===== */
+    @media (max-width: 1200px) {
+      .form-grid-5cols {
+        grid-template-columns: repeat(3, 1fr);
+      }
+    }
+
+    /* ===== TABLET / SMALL DESKTOP (1024px and below) ===== */
+    @media (max-width: 1024px) {
+      .main-panel {
+        padding: 24px 20px;
+      }
+
+      .page-header {
+        padding: 20px 24px;
+      }
+
+      .page-header h1 {
+        font-size: 24px;
+      }
+
+      .page-header p {
+        font-size: 14px;
+      }
+
+      .card {
+        padding: 24px 20px;
+      }
+
+      .card-title {
+        font-size: 17px;
+      }
+
+      .form-grid-3cols {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      .student-table-wrapper table {
+        min-width: 850px;
+        width: auto;
+      }
+
+      .student-table-wrapper th,
+      .student-table-wrapper td {
+        padding: 13px 14px;
+        font-size: 13px;
+      }
+    }
+
+    /* ===== MOBILE (768px and below) ===== */
+    @media (max-width: 768px) {
+      .main-panel {
+        padding: 20px 16px;
+      }
+
+      .page-header {
+        padding: 18px 20px;
+      }
+
+      .page-header h1 {
+        font-size: 21px;
+        gap: 10px;
+      }
+
+      .page-header p {
+        font-size: 13.5px;
+        padding-left: 12px;
+      }
+
+      .card {
+        padding: 20px 16px;
+      }
+
+      .card-title {
+        font-size: 16px;
+        flex-direction: column;
+        align-items: flex-start;
+        margin-bottom: 20px;
+      }
+
+      .card-title-left {
+        flex-wrap: wrap;
+      }
+
+      /* All grids become single column */
+      .form-grid-5cols,
+      .form-grid-3cols {
+        grid-template-columns: 1fr;
+      }
+
+      /* Quick fill stacks */
+      .quick-fill-box {
+        flex-direction: column;
+        align-items: stretch;
+      }
+
+      .quick-fill-controls {
+        flex-direction: column;
+        align-items: stretch;
+      }
+
+      .quick-fill-input {
+        width: 100%;
+      }
+
+      .btn-pill {
+        justify-content: center;
+      }
+
+      /* Selection toolbar stacks */
+      .selection-toolbar {
+        flex-direction: column;
+        align-items: stretch;
+      }
+
+      .selection-info {
+        justify-content: center;
+        flex-wrap: wrap;
+      }
+
+      /* Table - scrollable */
+      .student-table-wrapper table {
+        min-width: 720px;
+        width: auto;
+      }
+
+      .student-table-wrapper th {
+        font-size: 11px;
+        padding: 10px 10px;
+      }
+
+      .student-table-wrapper td {
+        padding: 10px 10px;
+        font-size: 12px;
+      }
+
+      .fee-input {
+        width: 100px;
+        padding: 6px 8px;
+        font-size: 12px;
+      }
+
+      /* Buttons stack vertically */
+      .btn-actions {
+        flex-direction: column;
+      }
+
+      .btn {
+        justify-content: center;
+        padding: 12px 20px;
+        font-size: 14px;
+      }
+
+      /* Form controls */
+      .form-control {
+        padding: 12px 14px;
+        font-size: 14px;
+      }
+
+      .form-group label {
+        font-size: 13.5px;
+      }
+
+      .form-group label i {
+        width: 16px;
+        font-size: 14px;
+      }
+
+      /* Toast */
+      .toast-msg {
+        bottom: 20px;
+        right: 20px;
+        left: 20px;
+        padding: 14px 20px;
+        font-size: 13.5px;
+        text-align: center;
+        justify-content: center;
+        max-width: none;
+      }
+
+      /* Month-year picker */
+      .month-year-picker {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    /* ===== SMALL MOBILE (480px and below) ===== */
+    @media (max-width: 480px) {
+      .main-panel {
+        padding: 16px 12px;
+      }
+
+      .page-header {
+        padding: 16px 18px;
+      }
+
+      .page-header h1 {
+        font-size: 18px;
+        gap: 8px;
+      }
+
+      .page-header h1 i {
+        font-size: 17px;
+      }
+
+      .page-header p {
+        font-size: 12.5px;
+        padding-left: 10px;
+      }
+
+      .card {
+        padding: 16px 14px;
+      }
+
+      .card-title {
+        font-size: 15px;
+        margin-bottom: 16px;
+        padding-bottom: 12px;
+      }
+
+      .card-title i {
+        font-size: 18px;
+      }
+
+      .badge-counter {
+        font-size: 11px;
+        padding: 3px 10px;
+      }
+
+      .form-control {
+        padding: 10px 12px;
+        font-size: 13.5px;
+      }
+
+      /* Table - smaller min-width */
+      .student-table-wrapper table {
+        min-width: 600px;
+        width: auto;
+      }
+
+      .student-table-wrapper th {
+        font-size: 10px;
+        padding: 9px 8px;
+        letter-spacing: 0;
+      }
+
+      .student-table-wrapper td {
+        padding: 9px 8px;
+        font-size: 11px;
+      }
+
+      .fee-input {
+        width: 80px;
+        padding: 5px 6px;
+        font-size: 11px;
+      }
+
+      .btn {
+        padding: 10px 16px;
+        font-size: 13px;
+        gap: 6px;
+      }
+
+      .btn-actions {
+        gap: 10px;
+        margin-top: 24px;
+        padding-top: 18px;
+      }
+
+      .btn-pill {
+        padding: 7px 12px;
+        font-size: 12px;
+      }
+
+      .req {
+        font-size: 12px;
+      }
+
+      .toast-msg {
+        padding: 12px 16px;
+        font-size: 12.5px;
+        bottom: 16px;
+        right: 16px;
+        left: 16px;
+      }
+
+      .form-group label i {
+        width: 14px;
+        font-size: 13px;
+      }
+    }
+
+    /* ===== EXTRA SMALL (360px and below) ===== */
+    @media (max-width: 360px) {
+      .main-panel {
+        padding: 10px 8px;
+      }
+
+      .student-table-wrapper table {
+        min-width: 500px;
+        width: auto;
+      }
+
+      .student-table-wrapper th {
+        font-size: 9px;
+        padding: 8px 6px;
+      }
+
+      .student-table-wrapper td {
+        padding: 8px 6px;
+        font-size: 10px;
+      }
+
+      .fee-input {
+        width: 70px;
+        padding: 4px 5px;
+        font-size: 10px;
+      }
+
+      .btn-pill {
+        font-size: 11px;
+        padding: 6px 10px;
+      }
+    }
+
+    /* ===== PRINT STYLES ===== */
+    @media print {
+      .btn-actions,
+      .btn-pill,
+      .selection-toolbar,
+      .student-checkbox,
+      .fee-input {
+        display: none !important;
+      }
+
+      .card {
+        box-shadow: none;
+        border: 1px solid #ddd;
+      }
+
+      .page-header {
+        box-shadow: none;
+        border: 1px solid #ddd;
+      }
+
+      .student-table-wrapper th {
+        background: #2563eb !important;
+        color: white !important;
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+      }
+
+      .student-table-wrapper {
+        overflow: visible !important;
+        border: 1px solid #ddd;
+      }
+
+      .student-table-wrapper table {
+        min-width: 100% !important;
+        width: 100% !important;
+      }
+    }
+  </style>
 </head>
 <body>
   <!-- Header Placeholder -->
@@ -65,19 +1049,22 @@
         </div>
 
         <div class="form-grid-3cols">
+          <!-- ===== Fee Type: free text + dropdown picker ===== -->
           <div class="form-group">
             <label><i class="fas fa-tag"></i> Fee Type <span class="req">*</span></label>
-            <select class="form-control" id="feeType" onchange="updateStudentFeeStatuses()" required>
-              <option value="Tuition Fee">Tuition Fee</option>
-              <option value="Admission Fee">Admission Fee</option>
-              <option value="Annual Fee">Annual Fee</option>
-              <option value="Exam Fee">Exam Fee</option>
-              <option value="Library Fee">Library Fee</option>
-              <option value="Sports Fee">Sports Fee</option>
-              <option value="Transport Fee">Transport Fee</option>
-              <option value="Lab Fee">Lab Fee</option>
-              <option value="Fine">Fine</option>
-            </select>
+            <div class="fee-type-wrap" id="feeTypeWrap">
+              <input type="text" class="form-control" id="feeType" placeholder="Type or pick a fee type..." autocomplete="off" required>
+              <button type="button" class="fee-type-toggle" id="feeTypeToggle" title="Show common fee types">
+                <i class="fas fa-chevron-down"></i>
+              </button>
+              <div class="fee-type-menu" id="feeTypeMenu">
+                <button type="button" data-value="Tuition Fee">Tuition Fee</button>
+                <button type="button" data-value="Admission Fee">Admission Fee</button>
+                <button type="button" data-value="Exam Fee">Exam Fee</button>
+                <button type="button" data-value="Sports Fee">Sports Fee</button>
+                <button type="button" data-value="Fine">Fine</button>
+              </div>
+            </div>
           </div>
 
           <div class="form-group">
@@ -134,8 +1121,6 @@
             <span><strong>Select:</strong></span>
             <button type="button" class="btn-pill" onclick="selectAllStudents(true)">All</button>
             <button type="button" class="btn-pill" onclick="selectAllStudents(false)">None</button>
-            <button type="button" class="btn-pill" onclick="selectFirstN(5)">First 5</button>
-            <button type="button" class="btn-pill" onclick="selectFirstN(10)">First 10</button>
             <button type="button" class="btn-pill" onclick="invertSelection()">Invert</button>
           </div>
 
@@ -178,11 +1163,11 @@
           <button type="button" class="btn btn-secondary" onclick="resetForm()">
             <i class="fas fa-undo"></i> Reset Form
           </button>
-          <a href="mark-payment.html" class="btn btn-secondary">
-            <i class="fas fa-check-circle"></i> Mark Payment
-          </a>
           <a href="view-fee-details.html" class="btn btn-secondary">
             <i class="fas fa-eye"></i> View All Fee Records
+          </a>
+          <a href="index.html" class="btn btn-secondary">
+            <i class="fas fa-arrow-left"></i> Back to Dashboard
           </a>
         </div>
       </div>
@@ -224,6 +1209,7 @@
       // Existing page initialization
       populateClassDropdown();
       populateMonthsDropdown();
+      initFeeTypePicker();
       // Due date is now left empty for admin to pick
     });
 
@@ -276,6 +1262,43 @@
       t.innerHTML = `<i class="fas fa-check-circle"></i> ${msg}`;
       document.body.appendChild(t);
       setTimeout(() => t.remove(), 2600);
+    }
+
+    // ================= FEE TYPE PICKER (free text + dropdown) =================
+    function initFeeTypePicker() {
+      const wrap = document.getElementById('feeTypeWrap');
+      const input = document.getElementById('feeType');
+      const toggle = document.getElementById('feeTypeToggle');
+      const menu = document.getElementById('feeTypeMenu');
+
+      // Toggle the dropdown menu
+      toggle.addEventListener('click', (e) => {
+        e.stopPropagation();
+        menu.classList.toggle('open');
+      });
+
+      // Click a menu option -> fill the input
+      menu.querySelectorAll('button').forEach(btn => {
+        btn.addEventListener('click', () => {
+          input.value = btn.getAttribute('data-value');
+          menu.classList.remove('open');
+          input.focus();
+        });
+      });
+
+      // Close the menu when clicking outside
+      document.addEventListener('click', (e) => {
+        if (!wrap.contains(e.target)) {
+          menu.classList.remove('open');
+        }
+      });
+
+      // Close menu on Escape
+      input.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape') {
+          menu.classList.remove('open');
+        }
+      });
     }
 
     // ================= STATE =================
@@ -467,16 +1490,6 @@
       renderStudentTable(document.getElementById('studentSearchInput').value);
     }
 
-    function selectFirstN(n) {
-      selectedRegNos.clear();
-      const count = Math.min(n, currentClassStudents.length);
-      for (let i = 0; i < count; i++) {
-        selectedRegNos.add(currentClassStudents[i].regNo);
-      }
-      renderStudentTable(document.getElementById('studentSearchInput').value);
-      showToast(`Selected first ${count} student${count !== 1 ? 's' : ''}`);
-    }
-
     function invertSelection() {
       currentClassStudents.forEach(s => {
         if (selectedRegNos.has(s.regNo)) {
@@ -565,7 +1578,7 @@
     // ================= ASSIGN FEE (LOCAL STORAGE) =================
     function assignFeeToSelectedStudents() {
       const classId = document.getElementById('classSelect').value;
-      const feeType = document.getElementById('feeType').value;
+      const feeType = document.getElementById('feeType').value.trim();
       const feeMonth = document.getElementById('feeMonth').value;
       const dueDate = document.getElementById('dueDate').value;
 
@@ -574,7 +1587,7 @@
         return;
       }
       if (!feeType) {
-        showToast('⚠️ Please select a fee type');
+        showToast('⚠️ Please enter or select a fee type');
         return;
       }
       if (!feeMonth) {
