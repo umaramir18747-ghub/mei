@@ -1,0 +1,1171 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>MEI – My Attendance</title>
+  <link rel="icon" type="image/png" href="../logo2.png">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  
+  <style>
+    /* ================== components.css ================== */
+    :root {
+      --ink: oklch(22% .035 300);
+      --ink-soft: oklch(38% .03 300);
+      --paper: oklch(97% .015 86);
+      --surface: oklch(100% .008 86);
+      --line: oklch(88% .025 86);
+      --blue: oklch(48% .18 260);
+      --blue-deep: oklch(32% .16 260);
+      --blue-soft: oklch(82% .09 260);
+      --gold: oklch(78% .15 85);
+      --lime: oklch(82% .17 108);
+      --ease: cubic-bezier(.16, 1, .3, 1);
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'DM Sans', 'Segoe UI', Roboto, sans-serif;
+    }
+
+    html, body {
+      height: 100%;
+    }
+
+    body {
+      background: #f4f7fc;
+      color: var(--ink);
+    }
+
+    /* ========== HEADER ========== */
+    .top-bar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 70px;
+      background: white;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 24px;
+      box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
+      z-index: 1000;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .top-bar-left,
+    .top-bar-right {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .header-icons {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .icon-btn {
+      background: #f8fafd;
+      border: 1px solid var(--line);
+      width: 42px;
+      height: 42px;
+      border-radius: 4px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      color: var(--blue);
+      font-size: 20px;
+      transition: all 0.2s var(--ease);
+    }
+
+    .icon-btn:hover {
+      background: var(--blue);
+      color: white;
+      border-color: var(--blue);
+    }
+
+    .school-logo {
+      width: 42px;
+      height: 42px;
+      overflow: hidden;
+    }
+
+    .school-logo img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+    }
+
+    .school-name {
+      font-size: 21px;
+      font-weight: 700;
+      color: var(--ink);
+      letter-spacing: -0.2px;
+    }
+
+    .school-name-wrap {
+      display: flex;
+      align-items: center;
+    }
+
+    .datetime-display {
+      background: #f8fafd;
+      padding: 8px 16px;
+      border: 1px solid var(--line);
+      display: flex;
+      align-items: center;
+      gap: 18px;
+      font-size: 14.5px;
+      border-radius: 4px;
+    }
+
+    .date-box,
+    .time-box {
+      display: flex;
+      align-items: center;
+      gap: 9px;
+    }
+
+    .date-box i,
+    .time-box i {
+      color: var(--blue);
+      font-size: 16px;
+    }
+
+    .date-text,
+    .time-text {
+      font-weight: 600;
+      color: var(--ink-soft);
+    }
+
+    .time-text {
+      font-family: 'Courier New', monospace;
+      letter-spacing: 1px;
+    }
+
+    /* ========== HEADER DROPDOWN ========== */
+    .header-dropdown {
+      position: relative;
+    }
+
+    .dropdown-menu {
+      position: absolute;
+      right: 0;
+      top: 62px;
+      background: white;
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.12);
+      width: 200px;
+      overflow: hidden;
+      border-radius: 4px;
+      opacity: 0;
+      visibility: hidden;
+      transform: translateY(8px);
+      transition: all 0.2s var(--ease);
+      z-index: 1100;
+      border: 1px solid var(--line);
+    }
+
+    .dropdown-menu.active {
+      opacity: 1;
+      visibility: visible;
+      transform: translateY(0);
+    }
+
+    .dropdown-item {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 14px 20px;
+      color: var(--ink-soft);
+      text-decoration: none;
+      font-size: 14.8px;
+      transition: all 0.2s var(--ease);
+    }
+
+    .dropdown-item:hover {
+      background: var(--blue-soft);
+      color: var(--blue);
+    }
+
+    .dropdown-item i {
+      width: 20px;
+      color: var(--blue);
+    }
+
+    .dropdown-item:hover i {
+      color: var(--blue);
+    }
+
+    /* ========== APP WRAPPER ========== */
+    .app-wrapper {
+      display: flex;
+      margin-top: 70px;
+      min-height: calc(100vh - 70px);
+      transition: all 0.3s var(--ease);
+    }
+
+    /* ========== SIDEBAR ========== */
+    .side-nav {
+      width: 260px;
+      background: white;
+      border-right: 1px solid var(--line);
+      padding: 20px 0;
+      position: sticky;
+      top: 70px;
+      height: calc(100vh - 70px);
+      overflow-y: auto;
+      overflow-x: hidden;
+      box-shadow: 2px 0 10px rgba(0, 0, 0, 0.02);
+      flex-shrink: 0;
+      display: flex;
+      flex-direction: column;
+      border-radius: 0;
+      transition: width 0.3s var(--ease), transform 0.3s var(--ease);
+    }
+
+    .side-nav.hidden {
+      width: 0;
+      overflow: hidden;
+      padding: 0;
+      border-right: none;
+    }
+
+    .nav-menu {
+      list-style: none;
+      flex: 1;
+    }
+
+    .nav-divider {
+      height: 2px;
+      background: var(--blue);
+      margin: 16px 20px;
+      opacity: 0.3;
+    }
+
+    .section-header {
+      padding: 0 22px 8px;
+      font-size: 12.5px;
+      font-weight: 700;
+      color: var(--ink-soft);
+      letter-spacing: 0.6px;
+      text-transform: uppercase;
+      opacity: 0.7;
+    }
+
+    .nav-link {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      padding: 13px 22px;
+      color: var(--ink);
+      font-size: 14.8px;
+      font-weight: 500;
+      text-decoration: none;
+      transition: all 0.2s var(--ease);
+      border-left: 4px solid transparent;
+      white-space: nowrap;
+    }
+
+    .nav-link:hover {
+      background: var(--blue-soft);
+      color: var(--blue-deep);
+      border-left-color: var(--blue);
+    }
+
+    .nav-link.active,
+    .dashboard-link {
+      background: var(--blue-soft);
+      color: var(--blue-deep);
+      border-left-color: var(--blue);
+    }
+
+    .nav-link i {
+      width: 22px;
+      color: var(--blue);
+      font-size: 18px;
+      transition: color 0.2s var(--ease);
+    }
+
+    .nav-link:hover i,
+    .nav-link.active i,
+    .dashboard-link i {
+      color: var(--blue-deep);
+    }
+
+    .side-nav.hidden .nav-link span,
+    .side-nav.hidden .section-header,
+    .side-nav.hidden .nav-divider,
+    .side-nav.hidden .sidebar-footer {
+      display: none;
+    }
+
+    .side-nav.hidden .nav-link {
+      padding: 13px 0;
+      justify-content: center;
+    }
+
+    .side-nav.hidden .nav-link i {
+      margin: 0;
+      font-size: 20px;
+    }
+
+    /* ========== SIDEBAR DROPDOWNS ========== */
+    .dropdown-nav {
+      position: relative;
+    }
+
+    .dropdown-toggle {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      cursor: pointer;
+      width: 100%;
+      padding: 13px 22px;
+      color: var(--ink);
+      font-size: 14.8px;
+      font-weight: 500;
+      text-decoration: none;
+      border-left: 4px solid transparent;
+      gap: 14px;
+      transition: all 0.2s var(--ease);
+      background: transparent;
+      border-right: none;
+      border-top: none;
+      border-bottom: none;
+    }
+
+    .dropdown-toggle:hover {
+      background: var(--blue-soft);
+      border-left-color: var(--blue);
+      color: var(--blue-deep);
+    }
+
+    .dropdown-arrow {
+      font-size: 12px;
+      transition: transform 0.3s var(--ease);
+      margin-left: auto;
+      color: var(--blue);
+      flex-shrink: 0;
+    }
+
+    .dropdown-nav.active .dropdown-arrow {
+      transform: rotate(180deg);
+    }
+
+    .dropdown-menu-side {
+      list-style: none;
+      background: var(--blue-soft);
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.3s ease-out;
+      margin-left: 24px;
+      border-left: 2px solid var(--blue);
+      opacity: 0.6;
+    }
+
+    .dropdown-nav.active .dropdown-menu-side {
+      max-height: 400px;
+      transition: max-height 0.5s ease-in;
+    }
+
+    .dropdown-item-side {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 12px 24px;
+      color: var(--ink);
+      text-decoration: none;
+      font-size: 14px;
+      transition: all 0.2s var(--ease);
+    }
+
+    .dropdown-item-side:hover {
+      background: var(--blue);
+      color: white;
+    }
+
+    .dropdown-item-side i {
+      width: 20px;
+      font-size: 14px;
+      color: var(--blue);
+      transition: color 0.2s var(--ease);
+    }
+
+    .dropdown-item-side:hover i {
+      color: white;
+    }
+
+    /* ========== SIDEBAR FOOTER ========== */
+    .sidebar-footer {
+      padding: 22px 24px;
+      border-top: 1px solid var(--line);
+      margin-top: auto;
+    }
+
+    .developed-by {
+      font-size: 13.2px;
+      color: var(--ink-soft);
+      line-height: 1.6;
+      text-align: center;
+    }
+
+    .developed-by .label {
+      display: block;
+      font-weight: 500;
+      margin-bottom: 5px;
+      color: var(--ink-soft);
+      opacity: 0.7;
+    }
+
+    .developed-by .name {
+      display: block;
+      font-weight: 700;
+      color: var(--blue);
+    }
+
+    /* ========== MAIN CONTENT PANEL ========== */
+    .main-panel {
+      flex: 1;
+      padding: 40px 32px;
+      background: var(--paper);
+      overflow-y: auto;
+      transition: margin-left 0.3s var(--ease);
+    }
+
+    .top-row {
+      display: flex;
+      gap: 28px;
+      margin-bottom: 40px;
+      align-items: stretch;
+    }
+
+    .welcome-section {
+      flex: 1;
+      background: white;
+      padding: 36px;
+      border: 1px solid var(--line);
+      border-radius: 4px;
+    }
+
+    .welcome-title {
+      font-size: 27px;
+      font-weight: 700;
+      color: var(--ink);
+      margin-bottom: 16px;
+    }
+
+    .welcome-title span {
+      color: var(--blue);
+    }
+
+    .welcome-text {
+      font-size: 15.8px;
+      color: var(--ink-soft);
+      line-height: 1.75;
+      margin-bottom: 12px;
+    }
+
+    .profile-sidebar {
+      width: 260px;
+      background: white;
+      padding: 32px 24px;
+      text-align: center;
+      border: 1px solid var(--line);
+      border-radius: 4px;
+      flex-shrink: 0;
+    }
+
+    .passport-frame {
+      width: 158px;
+      height: 198px;
+      margin: 0 auto 18px;
+      border: 4px solid var(--blue);
+      border-radius: 4px;
+      overflow: hidden;
+    }
+
+    .passport-frame img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .profile-name {
+      font-size: 21px;
+      font-weight: 700;
+      color: var(--ink);
+    }
+
+    .profile-role {
+      font-size: 14.5px;
+      color: var(--ink-soft);
+      margin-top: 4px;
+      opacity: 0.8;
+    }
+
+    button {
+      border-radius: 4px;
+    }
+
+    .sidebar-overlay {
+      display: none;
+      position: fixed;
+      top: 70px;
+      left: 0;
+      width: 100%;
+      height: calc(100% - 70px);
+      background: rgba(0, 0, 0, 0.5);
+      z-index: 998;
+      opacity: 0;
+      visibility: hidden;
+      transition: opacity 0.25s var(--ease);
+    }
+
+    .sidebar-overlay.active {
+      opacity: 1;
+      visibility: visible;
+      display: block;
+    }
+
+    .side-nav::-webkit-scrollbar,
+    .main-panel::-webkit-scrollbar {
+      width: 6px;
+    }
+
+    .side-nav::-webkit-scrollbar-track,
+    .main-panel::-webkit-scrollbar-track {
+      background: transparent;
+    }
+
+    .side-nav::-webkit-scrollbar-thumb,
+    .main-panel::-webkit-scrollbar-thumb {
+      background: var(--blue-soft);
+      border-radius: 3px;
+    }
+
+    .side-nav::-webkit-scrollbar-thumb:hover,
+    .main-panel::-webkit-scrollbar-thumb:hover {
+      background: var(--blue);
+    }
+
+    /* ================== responsive-components.css ================== */
+    @media (max-width: 768px) {
+      .top-bar { padding: 0 12px; }
+      .top-bar-left, .top-bar-right { gap: 10px; }
+      #fullscreenToggle { display: none; }
+      .datetime-display { display: none; }
+      .icon-btn { width: 38px; height: 38px; font-size: 17px; border-radius: 4px; }
+      .icon-btn:hover { background: var(--blue); color: white; border-color: var(--blue); }
+      .school-logo { width: 36px; height: 36px; }
+      .school-name-wrap { flex: 1; min-width: 0; overflow: hidden; display: flex; align-items: center; height: auto; }
+      .top-bar-left { flex: 1; min-width: 0; align-items: center; }
+      .school-name {
+        display: block;
+        font-family: 'Playfair Display', 'Cormorant Garamond', 'Times New Roman', serif;
+        font-weight: 900;
+        font-style: italic;
+        letter-spacing: 0.5px;
+        text-transform: capitalize;
+        color: var(--blue-deep, #1e3a8a);
+        text-shadow: 0 1px 1px rgba(30, 58, 138, 0.15);
+        white-space: normal;
+        overflow: hidden;
+        text-overflow: unset;
+        font-size: 13.5px;
+        line-height: 1.25;
+        max-width: 100%;
+        word-wrap: break-word;
+        overflow-wrap: break-word;
+        position: static;
+        animation: none;
+      }
+      .side-nav {
+        position: fixed;
+        top: 70px;
+        left: 0;
+        height: calc(100vh - 70px);
+        width: 260px;
+        z-index: 999;
+        transform: translateX(-100%);
+        transition: transform 0.3s var(--ease);
+        box-shadow: 4px 0 24px rgba(0, 0, 0, 0.2);
+      }
+      .side-nav.hidden { transform: translateX(-100%); width: 260px; padding: 20px 0; }
+      .side-nav.mobile-visible { transform: translateX(0); }
+      .side-nav.hidden .nav-link span,
+      .side-nav.hidden .section-header,
+      .side-nav.hidden .nav-divider,
+      .side-nav.hidden .sidebar-footer { display: block; }
+      .side-nav.hidden .nav-link { padding: 13px 22px; justify-content: flex-start; }
+      .side-nav.hidden .nav-link i { margin: 0; font-size: inherit; }
+      .nav-link:hover { background: var(--blue-soft); color: var(--blue-deep); border-left-color: var(--blue); }
+      .nav-link i { color: var(--blue); }
+      .nav-link:hover i { color: var(--blue-deep); }
+      .dropdown-toggle:hover { background: var(--blue-soft); border-left-color: var(--blue); color: var(--blue-deep); }
+      .dropdown-item-side:hover { background: var(--blue); color: white; }
+      .dropdown-item-side:hover i { color: white; }
+      .sidebar-overlay {
+        display: block;
+        position: fixed;
+        top: 70px;
+        left: 0;
+        width: 100%;
+        height: calc(100vh - 70px);
+        background: rgba(15, 23, 42, 0.45);
+        z-index: 998;
+        opacity: 0;
+        visibility: hidden;
+        transition: opacity 0.25s var(--ease);
+      }
+      .sidebar-overlay.active { opacity: 1; visibility: visible; }
+      .main-panel { padding: 20px 16px; }
+      .top-row { flex-direction: column; gap: 20px; }
+      .profile-sidebar { width: 100%; border-radius: 4px; }
+      .welcome-section { padding: 24px; border-radius: 4px; }
+      .welcome-title { font-size: 22px; }
+      .welcome-title span { color: var(--blue); }
+      .passport-frame { width: 120px; height: 150px; margin: 0 auto 16px; border: 4px solid var(--blue); border-radius: 4px; }
+    }
+
+    @media (min-width: 769px) and (max-width: 1024px) {
+      .school-name {
+        font-family: 'Playfair Display', 'Cormorant Garamond', 'Times New Roman', serif;
+        font-weight: 900;
+        font-style: italic;
+        letter-spacing: 0.5px;
+        color: var(--blue-deep, #1e3a8a);
+        font-size: 18px;
+        max-width: 250px;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
+      .datetime-display { padding: 4px 12px; gap: 10px; border-radius: 4px; }
+      .date-text, .time-text { font-size: 12px; }
+      .date-box i, .time-box i { color: var(--blue); }
+      .top-row { gap: 20px; }
+      .welcome-section { padding: 28px; border-radius: 4px; }
+      .profile-sidebar { width: 240px; border-radius: 4px; }
+      .passport-frame { border: 4px solid var(--blue); border-radius: 4px; }
+      .icon-btn:hover { background: var(--blue); color: white; border-color: var(--blue); }
+      .nav-link:hover { background: var(--blue-soft); color: var(--blue-deep); border-left-color: var(--blue); }
+      .nav-link:hover i { color: var(--blue-deep); }
+      .dropdown-toggle:hover { background: var(--blue-soft); border-left-color: var(--blue); color: var(--blue-deep); }
+      .dropdown-item-side:hover { background: var(--blue); color: white; }
+      .dropdown-item-side:hover i { color: white; }
+    }
+
+    @media (max-width: 400px) {
+      .school-name {
+        font-family: 'Playfair Display', 'Cormorant Garamond', 'Times New Roman', serif;
+        font-weight: 900;
+        font-style: italic;
+        letter-spacing: 0.4px;
+        color: var(--blue-deep, #1e3a8a);
+        font-size: 12px;
+        line-height: 1.25;
+        white-space: normal;
+        word-wrap: break-word;
+        overflow-wrap: break-word;
+      }
+      .icon-btn { width: 34px; height: 34px; font-size: 15px; border-radius: 4px; }
+      .main-panel { padding: 16px 12px; }
+      .welcome-title { font-size: 20px; }
+      .welcome-title span { color: var(--blue); }
+      .welcome-section { padding: 16px; border-radius: 4px; }
+      .passport-frame { width: 100px; height: 125px; border: 4px solid var(--blue); border-radius: 4px; }
+      .profile-name { font-size: 18px; }
+      .section-header { font-size: 11px; color: var(--ink-soft); }
+      .nav-link { font-size: 13.5px; padding: 11px 16px; }
+      .nav-link i { color: var(--blue); }
+      .nav-link:hover { background: var(--blue-soft); color: var(--blue-deep); border-left-color: var(--blue); }
+      .nav-link:hover i { color: var(--blue-deep); }
+    }
+
+    @media (min-width: 1025px) {
+      .sidebar-overlay { display: none !important; }
+      .side-nav { position: sticky; }
+    }
+
+    /* ================== style.css (page-specific) ================== */
+    .page-header {
+      margin-bottom: 24px;
+    }
+    .page-header h1 {
+      font-size: 28px;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      color: #0f172a;
+      letter-spacing: -0.3px;
+    }
+    .page-header p {
+      color: #475569;
+      font-size: 15px;
+      margin-top: 4px;
+    }
+
+    /* Card */
+    .card {
+      background: #ffffff;
+      border-radius: 18px;
+      padding: 22px 24px;
+      box-shadow: 0 8px 24px rgba(15, 23, 42, 0.05);
+      border: 1px solid #e9eef3;
+      margin-bottom: 24px;
+      transition: box-shadow 0.2s;
+    }
+    .card:hover {
+      box-shadow: 0 12px 32px rgba(15, 23, 42, 0.08);
+    }
+
+    .card-title {
+      font-size: 17px;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 18px;
+      color: #1e293b;
+      letter-spacing: -0.2px;
+    }
+    .card-title i {
+      color: #2563eb;
+      font-size: 18px;
+      width: 22px;
+      text-align: center;
+    }
+
+    /* Overview Grid */
+    .overview-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 18px;
+    }
+
+    .overview-card {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      padding: 20px 22px;
+      border-radius: 16px;
+      border: 1.5px solid #e9eef3;
+      background: #ffffff;
+      transition: 0.2s;
+    }
+
+    .overview-card:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 24px rgba(15, 23, 42, 0.07);
+    }
+
+    .overview-icon {
+      width: 52px;
+      height: 52px;
+      border-radius: 14px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 22px;
+      flex-shrink: 0;
+    }
+
+    .overview-card.present .overview-icon {
+      background: #dcfce7;
+      color: #16a34a;
+    }
+    .overview-card.absent .overview-icon {
+      background: #fee2e2;
+      color: #dc2626;
+    }
+    .overview-card.percentage .overview-icon {
+      background: #dbeafe;
+      color: #2563eb;
+    }
+
+    .overview-num {
+      font-size: 26px;
+      font-weight: 800;
+      color: #0f172a;
+      line-height: 1.2;
+      letter-spacing: -0.5px;
+    }
+
+    .overview-label {
+      font-size: 13px;
+      color: #64748b;
+      font-weight: 600;
+      margin-top: 2px;
+    }
+
+    /* Month List */
+    .month-list {
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+
+    .month-accordion {
+      border: 1px solid #e9eef3;
+      border-radius: 14px;
+      overflow: hidden;
+      background: #ffffff;
+      transition: 0.2s;
+    }
+
+    .month-accordion[open] {
+      box-shadow: 0 4px 16px rgba(15, 23, 42, 0.05);
+    }
+
+    .month-accordion summary {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 16px 20px;
+      cursor: pointer;
+      list-style: none;
+      background: #f8fafc;
+      transition: 0.18s;
+      gap: 12px;
+    }
+
+    .month-accordion summary::-webkit-details-marker {
+      display: none;
+    }
+
+    .month-accordion summary:hover {
+      background: #f1f5f9;
+    }
+
+    .summary-left {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      min-width: 0;
+    }
+
+    .month-icon {
+      color: #2563eb;
+      font-size: 20px;
+      flex-shrink: 0;
+    }
+
+    .summary-left h3 {
+      font-size: 15.5px;
+      font-weight: 700;
+      color: #0f172a;
+      margin-bottom: 2px;
+    }
+
+    .summary-left span {
+      font-size: 13px;
+      color: #64748b;
+      display: block;
+    }
+
+    .chevron {
+      color: #94a3b8;
+      font-size: 14px;
+      transition: transform 0.25s;
+      flex-shrink: 0;
+    }
+
+    .month-accordion[open] .chevron {
+      transform: rotate(180deg);
+    }
+
+    /* Attendance Table */
+    .attendance-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 14px;
+    }
+
+    .attendance-table thead {
+      background: #f1f5f9;
+    }
+
+    .attendance-table th {
+      text-align: left;
+      padding: 12px 20px;
+      font-weight: 700;
+      color: #334155;
+      font-size: 12.5px;
+      letter-spacing: 0.3px;
+      text-transform: uppercase;
+      border-bottom: 2px solid #e2e8f0;
+      white-space: nowrap;
+    }
+
+    .attendance-table td {
+      padding: 13px 20px;
+      border-bottom: 1px solid #f1f5f9;
+      color: #1e293b;
+      vertical-align: middle;
+    }
+
+    .attendance-table tbody tr:last-child td {
+      border-bottom: none;
+    }
+
+    .attendance-table tbody tr:hover {
+      background: #f8fafc;
+    }
+
+    /* Status tags */
+    .status-tag {
+      display: inline-block;
+      padding: 4px 12px;
+      border-radius: 20px;
+      font-size: 12px;
+      font-weight: 700;
+      text-align: center;
+      min-width: 70px;
+      letter-spacing: 0.2px;
+    }
+
+    .status-tag.present {
+      background: #dcfce7;
+      color: #16a34a;
+    }
+    .status-tag.absent {
+      background: #fee2e2;
+      color: #dc2626;
+    }
+    .status-tag.leave {
+      background: #fef3c7;
+      color: #d97706;
+    }
+
+    /* Empty state */
+    .empty-state {
+      text-align: center;
+      padding: 48px 20px;
+      color: #94a3b8;
+    }
+
+    .empty-state i {
+      font-size: 44px;
+      margin-bottom: 14px;
+      color: #cbd5e1;
+      display: block;
+    }
+
+    .empty-state p {
+      font-size: 15px;
+    }
+
+    /* Responsive */
+    @media (max-width: 850px) {
+      .overview-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media (max-width: 600px) {
+      .overview-card {
+        padding: 16px 18px;
+      }
+      .overview-icon {
+        width: 44px;
+        height: 44px;
+        font-size: 19px;
+      }
+      .overview-num {
+        font-size: 22px;
+      }
+      .attendance-table th,
+      .attendance-table td {
+        padding: 10px 12px;
+        font-size: 13px;
+      }
+      .summary-left h3 {
+        font-size: 14px;
+      }
+      .summary-left span {
+        font-size: 12px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div id="header-placeholder"></div>
+  <div class="app-wrapper" id="appWrapper">
+    <div id="sidebar-placeholder"></div>
+
+    <main class="main-panel">
+      <div class="page-header">
+        <h1><i class="fas fa-calendar-check" style="color:#2563eb;"></i> My Attendance</h1>
+        <p>Your daily attendance record</p>
+      </div>
+
+      <div class="card">
+        <div class="card-title">
+          <i class="fas fa-chart-pie"></i> Overview
+        </div>
+        <div class="overview-grid">
+          <div class="overview-card present">
+            <div class="overview-icon"><i class="fas fa-check-circle"></i></div>
+            <div>
+              <div class="overview-num" id="presentCount">0</div>
+              <div class="overview-label">Days Present</div>
+            </div>
+          </div>
+          <div class="overview-card absent">
+            <div class="overview-icon"><i class="fas fa-times-circle"></i></div>
+            <div>
+              <div class="overview-num" id="absentCount">0</div>
+              <div class="overview-label">Days Absent</div>
+            </div>
+          </div>
+          <div class="overview-card percentage">
+            <div class="overview-icon"><i class="fas fa-percentage"></i></div>
+            <div>
+              <div class="overview-num" id="percentageCount">0%</div>
+              <div class="overview-label">Attendance %</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-title">
+          <i class="fas fa-history"></i> Monthly Details
+        </div>
+        <div class="month-list" id="monthList"></div>
+      </div>
+    </main>
+  </div>
+
+  <script src="../components.js"></script>
+  <script>
+    function requireTeacherSession() {
+      const stored = localStorage.getItem('messCurrentUser');
+      const session = stored ? JSON.parse(stored) : null;
+      if (!session || session.role !== 'teacher') {
+        window.location.href = 'login.html';
+        return false;
+      }
+      return true;
+    }
+
+    function loadComponents() {
+      fetch('header.html').then(r => r.text()).then(d => document.getElementById('header-placeholder').innerHTML = d);
+      fetch('sidebar.html').then(r => r.text()).then(d => document.getElementById('sidebar-placeholder').innerHTML = d);
+    }
+
+    window.onload = function() {
+      if (!requireTeacherSession()) return;
+      loadComponents();
+      setTimeout(() => { if (typeof window.initHeaderAndSidebar === 'function') window.initHeaderAndSidebar(); }, 400);
+      renderMyAttendance();
+    };
+
+    function loadFromStorage(key) {
+      const stored = localStorage.getItem(key);
+      return stored ? JSON.parse(stored) : [];
+    }
+
+    function formatDisplayDate(dateStr) {
+      const d = new Date(dateStr);
+      return d.toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' });
+    }
+    function dayName(dateStr) {
+      const d = new Date(dateStr);
+      return d.toLocaleDateString('en-GB', { weekday: 'long' });
+    }
+    function monthKey(dateStr) {
+      const d = new Date(dateStr);
+      return d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0');
+    }
+    function monthLabel(dateStr) {
+      const d = new Date(dateStr);
+      return d.toLocaleDateString('en-GB', { month: 'long', year: 'numeric' });
+    }
+
+    function renderMyAttendance() {
+      const session = JSON.parse(localStorage.getItem('messCurrentUser'));
+      const myRecords = loadFromStorage('messTeacherAttendanceRecords')
+        .filter(r => r.teacherRegNo === session.regNo);
+
+      const present = myRecords.filter(r => r.status === 'Present').length;
+      const absent = myRecords.filter(r => r.status === 'Absent').length;
+      const leave = myRecords.filter(r => r.status === 'Leave').length;
+      const total = present + absent + leave;
+      const pct = total > 0 ? Math.round((present / total) * 100) : 0;
+
+      document.getElementById('presentCount').textContent = present;
+      document.getElementById('absentCount').textContent = absent;
+      document.getElementById('percentageCount').textContent = pct + '%';
+
+      const monthList = document.getElementById('monthList');
+      if (myRecords.length === 0) {
+        monthList.innerHTML = `<div class="empty-state"><i class="fas fa-inbox"></i><p>No attendance records yet.</p></div>`;
+        return;
+      }
+
+      const sorted = [...myRecords].sort((a, b) => new Date(b.date) - new Date(a.date));
+      const groups = {};
+      sorted.forEach(r => {
+        const key = monthKey(r.date);
+        if (!groups[key]) groups[key] = [];
+        groups[key].push(r);
+      });
+
+      const monthKeys = Object.keys(groups).sort().reverse();
+
+      monthList.innerHTML = monthKeys.map((key, idx) => {
+        const records = groups[key];
+        const monthPresent = records.filter(r => r.status === 'Present').length;
+        const monthAbsent = records.filter(r => r.status === 'Absent').length;
+        const monthLeave = records.filter(r => r.status === 'Leave').length;
+
+        const rows = records.map(r => {
+          const statusClass = r.status === 'Present' ? 'present'
+                            : r.status === 'Absent' ? 'absent'
+                            : 'leave';
+          return `
+            <tr>
+              <td>${formatDisplayDate(r.date)}</td>
+              <td>${dayName(r.date)}</td>
+              <td><span class="status-tag ${statusClass}">${r.status}</span></td>
+              <td>${r.markedByName || '—'}</td>
+            </tr>
+          `;
+        }).join('');
+
+        return `
+          <details class="month-accordion" ${idx === 0 ? 'open' : ''}>
+            <summary>
+              <div class="summary-left">
+                <i class="fas fa-calendar-alt month-icon"></i>
+                <div>
+                  <h3>${monthLabel(records[0].date)}</h3>
+                  <span>
+                    ${monthPresent} present · ${monthAbsent} absent
+                    ${monthLeave > 0 ? `· ${monthLeave} leave` : ''}
+                  </span>
+                </div>
+              </div>
+              <i class="fas fa-chevron-down chevron"></i>
+            </summary>
+            <table class="attendance-table">
+              <thead>
+                <tr><th>Date</th><th>Day</th><th>Status</th><th>Marked By</th></tr>
+              </thead>
+              <tbody>${rows}</tbody>
+            </table>
+          </details>
+        `;
+      }).join('');
+    }
+  </script>
+</body>
+</html>
