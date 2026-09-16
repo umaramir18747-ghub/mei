@@ -1,6 +1,7 @@
 /* ================== components.css ================== */
 /* Consolidated CSS for all components (Header, Sidebar, Main Panel) */
 /* Used by: Dashboard, Student, Teacher, Admission, Academic Managers */
+/* Unified theme tokens applied | Mobile-first safeguards */
 
 :root {
   /* === BLUE THEME from index.css === */
@@ -28,8 +29,11 @@ html, body {
   height: 100%;
 }
 
+/* ============================================
+   ✅ BODY — SOFT COOL SLATE
+   ============================================ */
 body {
-  background: #f4f7fc;
+  background: #f8fafc;
   color: var(--ink);
 }
 
@@ -50,7 +54,7 @@ body {
   border-bottom: 1px solid var(--line);
 }
 
-.top-bar-left, 
+.top-bar-left,
 .top-bar-right {
   display: flex;
   align-items: center;
@@ -88,6 +92,7 @@ body {
   width: 42px;
   height: 42px;
   overflow: hidden;
+  flex-shrink: 0;
 }
 
 .school-logo img {
@@ -96,16 +101,33 @@ body {
   object-fit: contain;
 }
 
+/* ============================================
+   ✅ SCHOOL NAME — ELEGANT SPECIAL FONT (all devices)
+   Serif + italic + fully bold, deep blue
+   ============================================ */
 .school-name {
-  font-size: 21px;
-  font-weight: 700;
-  color: var(--ink);
-  letter-spacing: -0.2px;
+  display: block;
+  font-family: 'Playfair Display', 'Cormorant Garamond', 'Times New Roman', serif;
+  font-weight: 900;
+  font-style: italic;
+  letter-spacing: 0.5px;
+  text-transform: capitalize;
+  color: var(--blue-deep, #1e3a8a);
+  text-shadow: 0 1px 1px rgba(30, 58, 138, 0.15);
+  font-size: 20px;
+  line-height: 1.2;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 100%;
 }
 
 .school-name-wrap {
   display: flex;
   align-items: center;
+  min-width: 0;
+  flex: 1;
+  overflow: hidden;
 }
 
 .datetime-display {
@@ -119,20 +141,20 @@ body {
   border-radius: 4px;
 }
 
-.date-box, 
+.date-box,
 .time-box {
   display: flex;
   align-items: center;
   gap: 9px;
 }
 
-.date-box i, 
+.date-box i,
 .time-box i {
   color: var(--blue);
   font-size: 16px;
 }
 
-.date-text, 
+.date-text,
 .time-text {
   font-weight: 600;
   color: var(--ink-soft);
@@ -284,6 +306,7 @@ body {
   color: var(--blue);
   font-size: 18px;
   transition: color 0.2s var(--ease);
+  flex-shrink: 0;
 }
 
 .nav-link:hover i,
@@ -333,6 +356,7 @@ body {
   border-right: none;
   border-top: none;
   border-bottom: none;
+  font-family: inherit;
 }
 
 .dropdown-toggle:hover {
@@ -424,15 +448,88 @@ body {
   color: var(--blue);
 }
 
-/* ========== MAIN CONTENT PANEL ========== */
+/* ============================================
+   ✅ MAIN CONTENT PANEL — SOFT COOL SLATE
+   ============================================ */
 .main-panel {
   flex: 1;
   padding: 40px 32px;
-  background: var(--paper);
+  background: #f8fafc;
   overflow-y: auto;
   transition: margin-left 0.3s var(--ease);
+  min-width: 0;
 }
 
+/* ============================================
+   ✅ PAGE HEADER — WHITE ON TOP OF SLATE
+   ============================================ */
+.page-header {
+  background: #ffffff;
+  padding: 24px 32px;
+  margin-bottom: 28px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.04);
+  border: 1px solid #e9eef3;
+  width: 100%;
+}
+
+/* ============================================
+   ✅ DATA CARD — WHITE WITH BORDER + SHADOW
+   ============================================ */
+.data-card {
+  background: #ffffff;
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.05);
+  border: 1px solid #edf2f7;
+  overflow: hidden;
+  width: 100%;
+  margin-bottom: 28px;
+}
+
+/* ============================================
+   ✅ CARD HEADER — NEAR WHITE + BORDER-BOTTOM
+   ============================================ */
+.card-header {
+  padding: 20px 28px;
+  background: #fefefe;
+  border-bottom: 1px solid #eef2f8;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.card-header h2 {
+  font-size: 19px;
+  font-weight: 700;
+  color: #1e293b;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin: 0;
+  word-break: break-word;
+}
+
+.card-header h2 i {
+  color: #2563eb;
+  font-size: 20px;
+  flex-shrink: 0;
+}
+
+/* ============================================
+   ✅ TABLE WRAPPER — WHITE WITH BORDER #e2e8f0
+   ============================================ */
+.table-wrapper {
+  background: #ffffff;
+  border: 1.5px solid #e2e8f0;
+  overflow-x: auto;
+  overflow-y: visible;
+  padding: 0;
+  -webkit-overflow-scrolling: touch;
+  width: 100%;
+  position: relative;
+}
+
+/* ========== WELCOME ROW ========== */
 .top-row {
   display: flex;
   gap: 28px;
@@ -442,6 +539,7 @@ body {
 
 .welcome-section {
   flex: 1;
+  min-width: 0;
   background: white;
   padding: 36px;
   border: 1px solid var(--line);
@@ -453,6 +551,8 @@ body {
   font-weight: 700;
   color: var(--ink);
   margin-bottom: 16px;
+  word-break: break-word;
+  line-height: 1.25;
 }
 
 .welcome-title span {
@@ -464,6 +564,7 @@ body {
   color: var(--ink-soft);
   line-height: 1.75;
   margin-bottom: 12px;
+  word-break: break-word;
 }
 
 /* ========== PROFILE SIDEBAR ========== */
@@ -475,6 +576,7 @@ body {
   border: 1px solid var(--line);
   border-radius: 4px;
   flex-shrink: 0;
+  min-width: 0;
 }
 
 .passport-frame {
@@ -484,18 +586,21 @@ body {
   border: 4px solid var(--blue);
   border-radius: 4px;
   overflow: hidden;
+  flex-shrink: 0;
 }
 
 .passport-frame img {
   width: 100%;
   height: 100%;
   object-fit: cover;
+  display: block;
 }
 
 .profile-name {
   font-size: 21px;
   font-weight: 700;
   color: var(--ink);
+  word-break: break-word;
 }
 
 .profile-role {
@@ -503,11 +608,13 @@ body {
   color: var(--ink-soft);
   margin-top: 4px;
   opacity: 0.8;
+  word-break: break-word;
 }
 
 /* ========== UTILITY CLASSES ========== */
 button {
   border-radius: 4px;
+  font-family: inherit;
 }
 
 /* Overlay for mobile sidebar */
@@ -551,4 +658,23 @@ button {
 .side-nav::-webkit-scrollbar-thumb:hover,
 .main-panel::-webkit-scrollbar-thumb:hover {
   background: var(--blue);
+}
+
+/* ========== GLOBAL SAFEGUARDS ========== */
+img {
+  max-width: 100%;
+  height: auto;
+}
+
+/* ========== REDUCED MOTION ========== */
+@media (prefers-reduced-motion: reduce) {
+  .side-nav,
+  .icon-btn,
+  .nav-link,
+  .dropdown-toggle,
+  .dropdown-menu,
+  .dropdown-arrow,
+  .main-panel {
+    transition: none !important;
+  }
 }
