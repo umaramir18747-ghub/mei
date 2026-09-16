@@ -1,0 +1,1580 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+  <title>MEI – Assigned Subjects History</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="icon" type="image/png" href="../logo2.png">
+  <link rel="stylesheet" href="../components.css">
+  <link rel="stylesheet" href="../responsive-components.css">
+  <style>
+    /* ============================================
+       INTERNAL CSS - Unified Design System
+       Based on: class-details.html
+       Blue Theme | Full Width | Responsive
+       ============================================ */
+
+    /* ===== RESET & GLOBAL ===== */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Segoe UI', Roboto, system-ui, sans-serif;
+    }
+
+    body {
+      background: #f8fafc;
+      color: #1e293b;
+      line-height: 1.6;
+    }
+
+    /* ===== APP WRAPPER / CONTAINER ===== */
+    .app-wrapper {
+      display: flex;
+      min-height: 100vh;
+      width: 100%;
+    }
+
+    .app-container {
+      display: flex;
+      min-height: 100vh;
+      width: 100%;
+      flex: 1;
+    }
+
+    /* ===== MAIN PANEL - FULL WIDTH ===== */
+    .main-panel {
+      flex: 1;
+      padding: 32px;
+      width: 100%;
+      max-width: 100%;
+      min-width: 0;
+      background: #f8fafc;
+    }
+
+    /* ===== PAGE HEADER ===== */
+    .page-header {
+      background: white;
+      padding: 24px 32px;
+      margin-bottom: 28px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.04);
+      border: 1px solid #e9eef3;
+      width: 100%;
+    }
+
+    .page-header h1 {
+      font-size: 28px;
+      font-weight: 700;
+      background: linear-gradient(135deg, #1e3a8a, #2563eb);
+      background-clip: text;
+      -webkit-background-clip: text;
+      color: transparent;
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+
+    .page-header h1 i {
+      color: #2563eb;
+      background: none;
+      -webkit-text-fill-color: #2563eb;
+    }
+
+    .page-header p {
+      color: #475569;
+      margin-top: 8px;
+      font-size: 15px;
+      border-left: 3px solid #3b82f6;
+      padding-left: 16px;
+    }
+
+    /* ===== DATA CARD - FULL WIDTH ===== */
+    .data-card {
+      background: white;
+      box-shadow: 0 12px 30px rgba(0, 0, 0, 0.05);
+      border: 1px solid #edf2f7;
+      overflow: hidden;
+      width: 100%;
+      margin-bottom: 28px;
+    }
+
+    .card-header {
+      padding: 20px 28px;
+      background: #fefefe;
+      border-bottom: 1px solid #eef2f8;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+
+    .card-header h2 {
+      font-size: 19px;
+      font-weight: 700;
+      color: #1e293b;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .card-header h2 i {
+      color: #2563eb;
+      font-size: 20px;
+    }
+
+    /* ===== BADGE COUNT ===== */
+    .badge-count {
+      background: #eef2ff;
+      padding: 4px 14px;
+      font-size: 13px;
+      font-weight: 700;
+      color: #1e40af;
+      border-radius: 0;
+      white-space: nowrap;
+    }
+
+    /* ===== SEARCH & FILTER WRAPPER ===== */
+    .search-filter-row {
+      display: flex;
+      gap: 12px;
+      align-items: center;
+      flex: 1;
+      justify-content: flex-end;
+    }
+
+    .search-wrapper {
+      position: relative;
+      min-width: 260px;
+      flex: 1;
+      max-width: 400px;
+    }
+
+    .search-icon {
+      position: absolute;
+      left: 14px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: #94a3b8;
+      font-size: 14px;
+      pointer-events: none;
+    }
+
+    .search-input {
+      width: 100%;
+      padding: 10px 40px 10px 40px;
+      border: 1.5px solid #e2e8f0;
+      border-radius: 0;
+      font-size: 14px;
+      color: #1e293b;
+      background: white;
+      transition: all 0.25s;
+    }
+
+    .search-input:focus {
+      outline: none;
+      border-color: #3b82f6;
+      box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.12);
+    }
+
+    .search-clear-btn {
+      position: absolute;
+      right: 12px;
+      top: 50%;
+      transform: translateY(-50%);
+      background: none;
+      border: none;
+      color: #94a3b8;
+      cursor: pointer;
+      font-size: 16px;
+      padding: 4px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: color 0.2s;
+    }
+
+    .search-clear-btn:hover {
+      color: #2563eb;
+    }
+
+    /* ===== CLASS TYPE FILTER DROPDOWN ===== */
+    .filter-wrapper {
+      position: relative;
+      min-width: 160px;
+      flex-shrink: 0;
+    }
+
+    .filter-icon {
+      position: absolute;
+      left: 12px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: #94a3b8;
+      font-size: 13px;
+      pointer-events: none;
+    }
+
+    .filter-select {
+      width: 100%;
+      padding: 10px 32px 10px 34px;
+      border: 1.5px solid #e2e8f0;
+      border-radius: 0;
+      font-size: 14px;
+      color: #1e293b;
+      background: white;
+      cursor: pointer;
+      transition: all 0.25s;
+      appearance: none;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='10' viewBox='0 0 12 12'%3E%3Cpath fill='%2364748b' d='M6 8L1 3h10z'/%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-position: right 10px center;
+    }
+
+    .filter-select:focus {
+      outline: none;
+      border-color: #3b82f6;
+      box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.12);
+    }
+
+    /* ===== TABLE WRAPPER - AUTO SCROLL ===== */
+    .table-wrapper {
+      overflow-x: auto;
+      overflow-y: visible;
+      padding: 0;
+      -webkit-overflow-scrolling: touch;
+      width: 100%;
+      position: relative;
+      border: 1.5px solid #e2e8f0;
+    }
+
+    /* ===== TABLE - AUTO WIDTH ===== */
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      table-layout: auto;
+      min-width: 100%;
+      white-space: nowrap;
+    }
+
+    /* ===== TABLE HEADERS - BLUE THEME ===== */
+    th {
+      text-align: left;
+      padding: 16px 16px;
+      background: #2563eb;
+      font-weight: 700;
+      font-size: 12.5px;
+      color: white;
+      border-bottom: 2px solid #1d4ed8;
+      text-transform: uppercase;
+      letter-spacing: 0.4px;
+      white-space: nowrap;
+      position: sticky;
+      top: 0;
+      z-index: 10;
+    }
+
+    th i {
+      color: white;
+      margin-right: 6px;
+    }
+
+    td {
+      padding: 14px 16px;
+      border-bottom: 1px solid #f0f2f5;
+      font-size: 14px;
+      vertical-align: middle;
+      white-space: nowrap;
+      color: #1e293b;
+    }
+
+    td:last-child {
+      white-space: nowrap;
+    }
+
+    tr:hover {
+      background: #fafcff;
+    }
+
+    tbody tr:last-child td {
+      border-bottom: none;
+    }
+
+    /* ===== CLASS TYPE BADGE ===== */
+    .class-type-badge {
+      display: inline-block;
+      font-size: 11px;
+      font-weight: 700;
+      padding: 3px 12px;
+      letter-spacing: 0.3px;
+      text-transform: uppercase;
+      border-radius: 0;
+      white-space: nowrap;
+    }
+
+    .class-type-badge.regular {
+      background: #dbeafe;
+      color: #1e40af;
+      border: 1px solid #93c5fd;
+    }
+
+    .class-type-badge.makeup {
+      background: #fef3c7;
+      color: #92400e;
+      border: 1px solid #fde68a;
+    }
+
+    /* ===== SUBJECT COUNT BADGE ===== */
+    .subject-count-badge {
+      background: #eef2ff;
+      padding: 4px 12px;
+      font-size: 12.5px;
+      font-weight: 600;
+      color: #1e40af;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      white-space: nowrap;
+      border-radius: 0;
+    }
+
+    .subject-count-badge i {
+      color: #2563eb;
+      font-size: 12px;
+    }
+
+    /* ===== ACTION ICONS ===== */
+    .action-icons {
+      display: flex;
+      gap: 8px;
+      align-items: center;
+      justify-content: flex-end;
+      flex-wrap: nowrap;
+      white-space: nowrap;
+    }
+
+    .action-icons i {
+      width: 32px;
+      height: 32px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 13px;
+      cursor: pointer;
+      border: 1.5px solid #e2e8f0;
+      background: #f8fafc;
+      color: #475569;
+      border-radius: 0;
+      transition: all 0.2s ease;
+      flex-shrink: 0;
+    }
+
+    .action-icons i:hover {
+      transform: translateY(-1px);
+    }
+
+    .action-icons .view-icon:hover {
+      background: #dbeafe;
+      color: #1d4ed8;
+      border-color: #93c5fd;
+    }
+
+    .action-icons .delete-icon:hover {
+      background: #fee2e2;
+      color: #b91c1c;
+      border-color: #fecaca;
+    }
+
+    /* ===== NO RESULTS MESSAGE ===== */
+    #noResultsMessage {
+      text-align: center;
+      padding: 40px 20px;
+      color: #64748b;
+    }
+
+    #noResultsMessage i {
+      font-size: 32px;
+      display: block;
+      margin-bottom: 12px;
+      color: #94a3b8;
+    }
+
+    #noResultsMessage p:first-of-type {
+      font-size: 16px;
+      font-weight: 500;
+      color: #1e293b;
+    }
+
+    #noResultsMessage p:last-of-type {
+      font-size: 14px;
+    }
+
+    /* ============================================
+       PANEL / MODAL STYLES
+       ============================================ */
+
+    /* ===== MODAL OVERLAY (Class Detail) ===== */
+    .modal-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(15, 23, 42, 0.5);
+      backdrop-filter: blur(4px);
+      z-index: 2000;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      opacity: 0;
+      visibility: hidden;
+      transition: all 0.3s ease;
+    }
+
+    .modal-overlay.active {
+      opacity: 1;
+      visibility: visible;
+    }
+
+    .class-modal-container {
+      background: white;
+      width: 95%;
+      max-width: 1000px;
+      max-height: 90vh;
+      overflow-y: auto;
+      box-shadow: 0 20px 35px rgba(0, 0, 0, 0.2);
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* ===== MODAL HEADER ===== */
+    .modal-header-custom {
+      padding: 20px 24px;
+      background: #2563eb;
+      color: white;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      position: sticky;
+      top: 0;
+      z-index: 10;
+      flex-shrink: 0;
+    }
+
+    .modal-header-custom h2 {
+      font-size: 18px;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      color: white;
+    }
+
+    .modal-header-custom h2 i {
+      color: white;
+    }
+
+    .close-modal-btn {
+      background: rgba(255, 255, 255, 0.15);
+      border: none;
+      width: 36px;
+      height: 36px;
+      font-size: 16px;
+      cursor: pointer;
+      color: white;
+      transition: all 0.2s;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      border-radius: 0;
+    }
+
+    .close-modal-btn:hover {
+      background: #ef4444;
+      color: white;
+    }
+
+    /* ===== CLASS MODAL SPECIFIC ===== */
+    .info-summary-grid {
+      background: #f8fafc;
+      padding: 20px 28px;
+      border-bottom: 1px solid #ecf3fa;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px 24px;
+    }
+
+    .info-summary-item {
+      display: flex;
+      align-items: baseline;
+      gap: 10px;
+      font-size: 13.5px;
+      padding: 8px 0;
+      border-bottom: 1px dashed #e2e8f0;
+    }
+
+    .info-summary-item strong {
+      min-width: 110px;
+      color: #64748b;
+      font-weight: 600;
+      font-size: 12.5px;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .info-summary-item strong i {
+      color: #2563eb;
+      font-size: 12px;
+    }
+
+    /* ===== STATUS BADGES ===== */
+    .status-badge {
+      display: inline-block;
+      padding: 5px 12px;
+      font-size: 12px;
+      font-weight: 700;
+      text-align: center;
+      min-width: 85px;
+      white-space: nowrap;
+      border-radius: 0;
+    }
+
+    .status-active {
+      background: #dbeafe;
+      color: #1e40af;
+      border: 1px solid #bfdbfe;
+    }
+
+    .status-graduated {
+      background: #d1fae5;
+      color: #065f46;
+      border: 1px solid #a7f3d0;
+    }
+
+    /* ===== SUBJECT TABLE INSIDE MODAL ===== */
+    .modal-subject-table-wrap {
+      padding: 20px 28px 28px;
+    }
+
+    .modal-subject-table-wrap h4 {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 16px;
+      font-weight: 700;
+      color: #1e293b;
+      margin-bottom: 16px;
+      padding-bottom: 12px;
+      border-bottom: 2px solid #e5e7eb;
+    }
+
+    .modal-subject-table-wrap h4 i {
+      color: #2563eb;
+    }
+
+    .modal-subject-table {
+      width: 100%;
+      border-collapse: collapse;
+      table-layout: auto;
+      min-width: 100%;
+    }
+
+    .modal-subject-table thead th {
+      background: #2563eb;
+      color: white;
+      font-size: 11px;
+      font-weight: 700;
+      padding: 12px 16px;
+      border-bottom: 2px solid #1d4ed8;
+      text-transform: uppercase;
+      letter-spacing: 0.3px;
+      text-align: left;
+      white-space: nowrap;
+    }
+
+    .modal-subject-table thead th i {
+      color: white;
+      margin-right: 6px;
+    }
+
+    .modal-subject-table tbody td {
+      padding: 12px 16px;
+      font-size: 13.5px;
+      border-bottom: 1px solid #f1f5f9;
+      color: #1e293b;
+      font-weight: 500;
+      vertical-align: middle;
+      white-space: nowrap;
+    }
+
+    .modal-subject-table tbody tr:last-child td {
+      border-bottom: none;
+    }
+
+    .modal-subject-table tbody tr:hover {
+      background: #fafcff;
+    }
+
+    .modal-subject-table .idx-cell {
+      color: #94a3b8;
+      font-size: 13px;
+      width: 40px;
+    }
+
+    /* ===== SUBJECT DELETE ICON (inside modal) ===== */
+    .subject-delete-icon {
+      width: 32px;
+      height: 32px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 13px;
+      cursor: pointer;
+      border: 1.5px solid #e2e8f0;
+      background: #f8fafc;
+      color: #475569;
+      border-radius: 0;
+      transition: all 0.2s ease;
+    }
+
+    .subject-delete-icon:hover {
+      background: #fee2e2;
+      color: #b91c1c;
+      border-color: #fecaca;
+      transform: translateY(-1px);
+    }
+
+    /* ===== EMPTY STATE IN MODAL ===== */
+    .modal-empty-state {
+      text-align: center;
+      padding: 48px 20px;
+      color: #94a3b8;
+    }
+
+    .modal-empty-state i {
+      font-size: 42px;
+      margin-bottom: 14px;
+      display: block;
+      color: #93c5fd;
+    }
+
+    .modal-empty-state p {
+      font-size: 14px;
+    }
+
+    .modal-footer-custom {
+      padding: 16px 24px;
+      background: #f8fafc;
+      border-top: 1px solid #eef2f8;
+      text-align: right;
+      flex-shrink: 0;
+    }
+
+    .modal-footer-custom button {
+      background: #f1f5f9;
+      border: 1.5px solid #cbd5e1;
+      padding: 8px 20px;
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s;
+      border-radius: 0;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .modal-footer-custom button i {
+      color: #64748b;
+    }
+
+    .modal-footer-custom button:hover {
+      background: #ef4444;
+      color: white;
+      border-color: #ef4444;
+    }
+
+    .modal-footer-custom button:hover i {
+      color: white;
+    }
+
+    /* ===== TOAST NOTIFICATIONS ===== */
+    .toast-msg {
+      position: fixed;
+      bottom: 30px;
+      right: 30px;
+      background: #1e293b;
+      color: white;
+      padding: 16px 28px;
+      font-size: 15px;
+      font-weight: 500;
+      z-index: 2200;
+      box-shadow: 0 8px 30px rgba(0, 0, 0, 0.25);
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      animation: slideUp 0.35s ease;
+      max-width: 480px;
+      border-radius: 0;
+    }
+
+    .toast-msg i {
+      color: #3b82f6;
+      font-size: 20px;
+    }
+
+    @keyframes slideUp {
+      0% {
+        opacity: 0;
+        transform: translateY(40px);
+      }
+      100% {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    /* ============================================
+       DELETE CONFIRMATION MODAL — GITHUB STYLE
+       ============================================ */
+    .delete-modal-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(15, 23, 42, 0.55);
+      backdrop-filter: blur(4px);
+      z-index: 3000;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      opacity: 0;
+      visibility: hidden;
+      transition: opacity 0.25s ease, visibility 0.25s ease;
+    }
+
+    .delete-modal-overlay.active {
+      opacity: 1;
+      visibility: visible;
+    }
+
+    .delete-modal-container {
+      background: white;
+      width: 95%;
+      max-width: 520px;
+      max-height: 90vh;
+      overflow-y: auto;
+      box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.35);
+      border-radius: 0;
+      transform: scale(0.96);
+      transition: transform 0.25s cubic-bezier(0.2, 0.9, 0.4, 1.1);
+      padding: 0;
+    }
+
+    .delete-modal-overlay.active .delete-modal-container {
+      transform: scale(1);
+    }
+
+    .delete-modal-header {
+      padding: 20px 24px 8px 24px;
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      border-bottom: none;
+    }
+
+    .delete-modal-header .warning-icon {
+      background: #fee2e2;
+      color: #dc2626;
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 22px;
+      flex-shrink: 0;
+    }
+
+    .delete-modal-header h2 {
+      font-size: 20px;
+      font-weight: 700;
+      color: #0f172a;
+      margin: 0;
+      line-height: 1.3;
+    }
+
+    .delete-modal-header h2 small {
+      display: block;
+      font-size: 14px;
+      font-weight: 500;
+      color: #64748b;
+      margin-top: 2px;
+    }
+
+    .delete-modal-body {
+      padding: 8px 24px 20px 24px;
+    }
+
+    .delete-modal-body p {
+      color: #334155;
+      font-size: 14px;
+      line-height: 1.6;
+      margin-bottom: 18px;
+    }
+
+    .delete-modal-body .warning-box {
+      background: #fef2f2;
+      border-left: 4px solid #dc2626;
+      padding: 14px 18px;
+      border-radius: 0;
+      margin-bottom: 22px;
+      font-size: 14px;
+      color: #7f1d1d;
+      display: flex;
+      gap: 12px;
+      align-items: flex-start;
+    }
+
+    .delete-modal-body .warning-box i {
+      color: #dc2626;
+      font-size: 18px;
+      margin-top: 2px;
+    }
+
+    .delete-modal-body .warning-box strong {
+      color: #991b1b;
+    }
+
+    .delete-modal-footer {
+      padding: 16px 24px 24px 24px;
+      display: flex;
+      gap: 12px;
+      justify-content: flex-end;
+      border-top: 1px solid #eef2f8;
+      margin-top: 8px;
+    }
+
+    .delete-modal-footer button {
+      padding: 10px 22px;
+      font-size: 14px;
+      font-weight: 600;
+      border-radius: 0;
+      cursor: pointer;
+      transition: all 0.2s;
+      border: 1px solid transparent;
+      font-family: inherit;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .delete-modal-footer .btn-cancel {
+      background: #f1f5f9;
+      color: #334155;
+      border-color: #cbd5e1;
+    }
+
+    .delete-modal-footer .btn-cancel:hover {
+      background: #e2e8f0;
+    }
+
+    .delete-modal-footer .btn-delete {
+      background: #dc2626;
+      color: white;
+      border-color: #dc2626;
+    }
+
+    .delete-modal-footer .btn-delete:hover {
+      background: #b91c1c;
+      border-color: #b91c1c;
+      transform: translateY(-1px);
+      box-shadow: 0 6px 14px rgba(220, 38, 38, 0.3);
+    }
+
+    .delete-modal-footer .btn-delete i {
+      font-size: 14px;
+    }
+
+    /* ============================================
+       FULLY RESPONSIVE BREAKPOINTS
+       ============================================ */
+
+    @media (max-width: 1024px) {
+      .main-panel { padding: 24px 20px; }
+      .page-header { padding: 20px 24px; }
+      .page-header h1 { font-size: 24px; }
+      .page-header p { font-size: 14px; }
+      .card-header { padding: 16px 20px; }
+      .card-header h2 { font-size: 17px; }
+      .table-wrapper { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+      table { min-width: 900px; width: auto; }
+      th, td { padding: 13px 14px; font-size: 13px; }
+    }
+
+    @media (max-width: 768px) {
+      .main-panel { padding: 20px 16px; }
+      .page-header { padding: 18px 20px; }
+      .page-header h1 { font-size: 21px; gap: 10px; }
+      .page-header p { font-size: 13.5px; padding-left: 12px; margin-top: 6px; }
+      .card-header {
+        padding: 14px 16px;
+        flex-direction: column;
+        align-items: stretch;
+      }
+      .card-header h2 { font-size: 16px; flex-wrap: wrap; }
+      .badge-count { font-size: 12px; padding: 3px 10px; }
+      .search-filter-row { flex-direction: column; gap: 8px; width: 100%; }
+      .search-wrapper { width: 100%; min-width: 0; max-width: none; }
+      .filter-wrapper { width: 100%; min-width: 0; }
+      .table-wrapper { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+      table { min-width: 780px; width: auto; }
+      th { font-size: 11px; padding: 10px 10px; white-space: nowrap; }
+      td { padding: 10px 10px; font-size: 12px; white-space: nowrap; }
+      .action-icons { gap: 6px; }
+      .action-icons i { width: 28px; height: 28px; font-size: 11px; }
+      .class-modal-container { width: 96%; max-height: 94vh; }
+      .modal-header-custom { padding: 16px 20px; }
+      .modal-header-custom h2 { font-size: 16px; }
+      .close-modal-btn { width: 34px; height: 34px; font-size: 14px; }
+      .info-summary-grid {
+        grid-template-columns: 1fr;
+        padding: 16px 20px;
+        gap: 0;
+      }
+      .info-summary-item { padding: 6px 0; font-size: 12.5px; }
+      .info-summary-item strong { min-width: 100px; font-size: 11.5px; }
+      .modal-subject-table-wrap { padding: 16px 20px 20px; }
+      .modal-subject-table thead th { padding: 10px 12px; font-size: 10px; }
+      .modal-subject-table tbody td { padding: 10px 12px; font-size: 12px; }
+      .subject-delete-icon { width: 28px; height: 28px; font-size: 11px; }
+      .modal-footer-custom { padding: 14px 20px; }
+      .toast-msg {
+        bottom: 20px;
+        right: 20px;
+        left: 20px;
+        padding: 14px 20px;
+        font-size: 14px;
+        justify-content: center;
+        text-align: center;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .main-panel { padding: 16px 12px; }
+      .page-header { padding: 14px 16px; }
+      .page-header h1 { font-size: 18px; gap: 8px; }
+      .page-header h1 i { font-size: 17px; }
+      .page-header p { font-size: 12.5px; padding-left: 10px; }
+      .card-header { padding: 12px 14px; }
+      .card-header h2 { font-size: 14px; gap: 8px; }
+      .badge-count { font-size: 11px; padding: 3px 8px; }
+      table { min-width: 660px; width: auto; }
+      th { font-size: 10px; padding: 9px 8px; letter-spacing: 0; }
+      td { padding: 9px 8px; font-size: 11px; }
+      .action-icons { gap: 4px; }
+      .action-icons i { width: 26px; height: 26px; font-size: 10px; }
+      .modal-header-custom { padding: 14px 16px; }
+      .modal-header-custom h2 { font-size: 14px; gap: 8px; }
+      .close-modal-btn { width: 30px; height: 30px; font-size: 13px; }
+      .info-summary-grid { padding: 12px 16px; }
+      .info-summary-item { font-size: 12px; }
+      .info-summary-item strong { min-width: 85px; font-size: 11px; }
+      .modal-subject-table-wrap { padding: 12px 16px 16px; }
+      .modal-subject-table thead th { padding: 8px 10px; font-size: 9px; letter-spacing: 0; }
+      .modal-subject-table tbody td { padding: 8px 10px; font-size: 11px; }
+      .modal-footer-custom { padding: 12px 16px; }
+      .modal-footer-custom button { padding: 6px 14px; font-size: 12px; }
+      .toast-msg {
+        padding: 12px 16px;
+        font-size: 13px;
+        bottom: 16px;
+        right: 16px;
+        left: 16px;
+      }
+      .delete-modal-container { width: 98%; max-width: 100%; }
+      .delete-modal-header { padding: 16px 18px 6px 18px; }
+      .delete-modal-header h2 { font-size: 17px; }
+      .delete-modal-header .warning-icon { width: 36px; height: 36px; font-size: 18px; }
+      .delete-modal-body { padding: 6px 18px 16px 18px; }
+      .delete-modal-body p { font-size: 13px; }
+      .delete-modal-body .warning-box { padding: 12px 14px; font-size: 13px; }
+      .delete-modal-footer {
+        padding: 14px 18px 18px 18px;
+        flex-direction: column-reverse;
+      }
+      .delete-modal-footer button {
+        width: 100%;
+        justify-content: center;
+        padding: 12px 18px;
+      }
+    }
+
+    @media (max-width: 360px) {
+      .main-panel { padding: 10px 8px; }
+      table { min-width: 560px; width: auto; }
+      th { font-size: 9px; padding: 8px 6px; }
+      td { padding: 8px 6px; font-size: 10px; }
+      .action-icons i { width: 24px; height: 24px; font-size: 10px; }
+      .modal-header-custom h2 { font-size: 13px; }
+    }
+
+    /* ============================================
+       PRINT STYLES
+       ============================================ */
+    @media print {
+      .action-icons,
+      .close-modal-btn,
+      .search-filter-row,
+      .modal-overlay,
+      .delete-modal-overlay,
+      .toast-msg,
+      .subject-delete-icon {
+        display: none !important;
+      }
+      .data-card,
+      .page-header {
+        box-shadow: none;
+        border: 1px solid #ddd;
+      }
+      th {
+        background: #2563eb !important;
+        color: white !important;
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+      }
+      .table-wrapper { overflow: visible !important; }
+      table { min-width: 100% !important; width: 100% !important; }
+    }
+  </style>
+</head>
+<body>
+  <div id="header-placeholder"></div>
+
+  <div class="app-wrapper" id="appWrapper">
+    <div id="sidebar-placeholder"></div>
+
+    <div class="app-container">
+      <main class="main-panel">
+        <div class="page-header">
+          <h1><i class="fas fa-layer-group"></i> Assigned Subjects History</h1>
+          <p>Every subject-teacher assignment made from Assign Subjects, grouped by class.</p>
+        </div>
+
+        <div class="data-card">
+          <div class="card-header">
+            <h2><i class="fas fa-table-list"></i> All Assigned Subjects <span class="badge-count" id="classCountBadge">0</span></h2>
+            <div class="search-filter-row">
+              <div class="search-wrapper">
+                <i class="fas fa-search search-icon"></i>
+                <input type="text" id="searchInput" placeholder="Search by class, subject, teacher..." class="search-input">
+                <button class="search-clear-btn" id="clearSearchBtn" style="display: none;"><i class="fas fa-times-circle"></i></button>
+              </div>
+              <div class="filter-wrapper">
+                <i class="fas fa-filter filter-icon"></i>
+                <select id="classTypeFilter" class="filter-select">
+                  <option value="all" selected>All Types</option>
+                  <option value="regular">Regular</option>
+                  <option value="makeup">Make-Up</option>
+                </select>
+              </div>
+            </div>
+          </div>
+          <div class="table-wrapper">
+            <table>
+              <thead>
+                <tr>
+                  <th>Class Name</th>
+                  <th>Class ID</th>
+                  <th>Session</th>
+                  <th>Grade</th>
+                  <th>Section</th>
+                  <th>Class Type</th>
+                  <th>Subjects</th>
+                  <th style="text-align: right;">Actions</th>
+                </tr>
+              </thead>
+              <tbody id="classTableBody"></tbody>
+            </table>
+          </div>
+          <div id="noResultsMessage" style="display: none;">
+            <i class="fas fa-search"></i>
+            <p>No assigned subjects found</p>
+            <p>Try adjusting your search terms or filter</p>
+          </div>
+        </div>
+      </main>
+    </div>
+  </div>
+
+  <!-- MODAL overlay for class subjects detail view -->
+  <div id="classModalOverlay" class="modal-overlay">
+    <div class="class-modal-container">
+      <div class="modal-header-custom">
+        <h2 id="modalClassTitle"><i class="fas fa-book-open"></i> Class Subjects</h2>
+        <button class="close-modal-btn" id="closeModalBtn"><i class="fas fa-times"></i></button>
+      </div>
+      <div id="classModalDynamicContent"></div>
+      <div class="modal-footer-custom">
+        <button id="modalFooterCloseBtn"><i class="fas fa-times"></i> Close</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== SECURE DELETE MODAL (GitHub-style) ===== -->
+  <div id="deleteModalOverlay" class="delete-modal-overlay">
+    <div class="delete-modal-container">
+      <div class="delete-modal-header">
+        <div class="warning-icon"><i class="fas fa-exclamation-triangle"></i></div>
+        <h2 id="deleteModalTitle">Delete this item? <small>This action cannot be undone.</small></h2>
+      </div>
+      <div class="delete-modal-body">
+        <p id="deleteModalMessage">Are you sure you want to delete this item?</p>
+        <div class="warning-box">
+          <i class="fas fa-skull-crossbones"></i>
+          <div>
+            <strong>Warning:</strong> <span id="deleteModalWarningText">This action is permanent and cannot be undone.</span>
+          </div>
+        </div>
+      </div>
+      <div class="delete-modal-footer">
+        <button class="btn-cancel" id="cancelDeleteBtn"><i class="fas fa-times"></i> Cancel</button>
+        <button class="btn-delete" id="confirmDeleteBtn"><i class="fas fa-trash-alt"></i> Delete</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="../components.js"></script>
+  <script>
+    // ===== Load Components =====
+    function loadComponents() {
+      fetch('header.html')
+        .then(response => response.text())
+        .then(data => document.getElementById('header-placeholder').innerHTML = data)
+        .catch(err => console.error('Error loading header:', err));
+
+      fetch('sidebar.html')
+        .then(response => response.text())
+        .then(data => document.getElementById('sidebar-placeholder').innerHTML = data)
+        .catch(err => console.error('Error loading sidebar:', err));
+    }
+
+    window.onload = function() {
+      loadComponents();
+      setTimeout(() => {
+        if (typeof window.initHeaderAndSidebar === 'function') {
+          window.initHeaderAndSidebar();
+        }
+      }, 400);
+      applyFilters();
+    };
+
+    // ===== Storage Helpers =====
+    function loadFromStorage(key) {
+      const stored = localStorage.getItem(key);
+      return stored ? JSON.parse(stored) : [];
+    }
+
+    function saveToStorage(key, data) {
+      localStorage.setItem(key, JSON.stringify(data));
+    }
+
+    function showToast(msg, type = 'info') {
+      let t = document.createElement('div');
+      t.className = 'toast-msg';
+      const icon = type === 'success' ? 'fa-check-circle' : type === 'error' ? 'fa-exclamation-circle' : 'fa-info-circle';
+      t.innerHTML = `<i class="fas ${icon}"></i> ${msg}`;
+      t.style.borderLeft = `4px solid ${type === 'success' ? '#16a34a' : type === 'error' ? '#dc2626' : '#2563eb'}`;
+      document.body.appendChild(t);
+      setTimeout(() => t.remove(), 2400);
+    }
+
+    function escapeHtml(str) {
+      if (!str) return '';
+      return String(str).replace(/[&<>"']/g, m => ({
+        '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'
+      }[m]));
+    }
+
+    // ✅ Normalize teacher ID field — records may use `teacherRegNo` (new) or `teacherId` (legacy)
+    function getTeacherId(record) {
+      if (!record) return '';
+      return record.teacherRegNo || record.teacherId || '';
+    }
+
+    // ===== State =====
+    let groupedClasses = [];
+    let filteredClasses = [];
+
+    // ===== Load & Group =====
+    function buildGroupsViewModel() {
+      const records = loadFromStorage('messSubjects');
+      const grouped = {};
+
+      records.forEach(r => {
+        const cid = r.classId;
+        if (!grouped[cid]) {
+          grouped[cid] = {
+            className: r.className,
+            classId: r.classId,
+            classType: r.classType || 'regular',
+            grade: r.grade || '—',
+            section: r.section || '—',
+            session: r.session || '—',
+            subjects: []
+          };
+        }
+        grouped[cid].subjects.push(r);
+      });
+
+      return Object.values(grouped).sort((a, b) => {
+        if (a.classType === b.classType) return (a.className || '').localeCompare(b.className || '');
+        return a.classType === 'regular' ? -1 : 1;
+      });
+    }
+
+    // ===== Filter / Search =====
+    function applyFilters() {
+      const search = (document.getElementById('searchInput').value || '').toLowerCase().trim();
+      const typeFilter = document.getElementById('classTypeFilter').value;
+      const clearBtn = document.getElementById('clearSearchBtn');
+
+      groupedClasses = buildGroupsViewModel();
+
+      let results = groupedClasses;
+
+      if (typeFilter === 'regular') {
+        results = results.filter(c => c.classType === 'regular');
+      } else if (typeFilter === 'makeup') {
+        results = results.filter(c => c.classType === 'makeup');
+      }
+
+      if (search) {
+        clearBtn.style.display = 'inline-flex';
+        results = results.filter(c =>
+          (c.className || '').toLowerCase().includes(search) ||
+          (c.classId || '').toLowerCase().includes(search) ||
+          (c.classType || '').toLowerCase().includes(search) ||
+          c.subjects.some(s =>
+            (s.subjectName || '').toLowerCase().includes(search) ||
+            (s.teacherName || '').toLowerCase().includes(search) ||
+            getTeacherId(s).toLowerCase().includes(search)
+          )
+        );
+      } else {
+        clearBtn.style.display = 'none';
+      }
+
+      filteredClasses = results;
+      renderClassTable(filteredClasses);
+    }
+
+    // ===== Render Table =====
+    function renderClassTable(dataToRender) {
+      const tbody = document.getElementById('classTableBody');
+      const noResults = document.getElementById('noResultsMessage');
+      if (!tbody) return;
+
+      document.getElementById('classCountBadge').textContent = dataToRender.length;
+
+      if (dataToRender.length === 0) {
+        tbody.innerHTML = '';
+        noResults.style.display = 'block';
+        return;
+      }
+
+      noResults.style.display = 'none';
+
+      tbody.innerHTML = dataToRender.map(c => {
+        const isMakeup = c.classType === 'makeup';
+        const typeLabel = isMakeup ? 'Make-Up' : 'Regular';
+        const typeClass = isMakeup ? 'makeup' : 'regular';
+        const subjectCount = c.subjects.length;
+
+        return `
+          <tr>
+            <td><strong>${escapeHtml(c.className)}</strong></td>
+            <td>${escapeHtml(c.classId)}</td>
+            <td>${escapeHtml(c.session)}</td>
+            <td>${escapeHtml(c.grade)}</td>
+            <td>${escapeHtml(c.section)}</td>
+            <td><span class="class-type-badge ${typeClass}">${typeLabel}</span></td>
+            <td><span class="subject-count-badge"><i class="fas fa-book-open"></i> ${subjectCount} ${subjectCount === 1 ? 'Subject' : 'Subjects'}</span></td>
+            <td style="text-align: right;">
+              <div class="action-icons">
+                <i class="fas fa-eye view-icon" data-classid="${escapeHtml(c.classId)}" title="View Subjects"></i>
+                <i class="fas fa-trash-alt delete-icon" data-classid="${escapeHtml(c.classId)}" title="Delete All Subjects"></i>
+              </div>
+            </td>
+          </tr>
+        `;
+      }).join('');
+
+      // Attach listeners
+      document.querySelectorAll('.view-icon').forEach(icon => {
+        icon.addEventListener('click', (e) => {
+          e.stopPropagation();
+          openClassDetailPanel(icon.dataset.classid);
+        });
+      });
+
+      document.querySelectorAll('.delete-icon').forEach(icon => {
+        icon.addEventListener('click', (e) => {
+          e.stopPropagation();
+          openDeleteClassConfirmation(icon.dataset.classid);
+        });
+      });
+    }
+
+    // ============================================
+    // VIEW MODAL
+    // ============================================
+    function openClassDetailPanel(classId) {
+      const cls = groupedClasses.find(c => c.classId === classId);
+      if (!cls) return;
+
+      const isMakeup = cls.classType === 'makeup';
+      const typeLabel = isMakeup ? 'Make-Up' : 'Regular';
+      const typeClass = isMakeup ? 'makeup' : 'regular';
+
+      // ✅ Teacher ID now rendered as plain text (matching Teacher Name style)
+      const subjectsHtml = cls.subjects.length
+        ? cls.subjects.map((s, idx) => `
+            <tr>
+              <td class="idx-cell">${idx + 1}</td>
+              <td><strong>${escapeHtml(s.subjectName)}</strong></td>
+              <td>${escapeHtml(s.teacherName)}</td>
+              <td>${escapeHtml(getTeacherId(s) || '—')}</td>
+              <td style="text-align:center;">
+                <i class="fas fa-trash-alt subject-delete-icon"
+                   data-classid="${escapeHtml(cls.classId)}"
+                   data-subjectname="${escapeHtml(s.subjectName)}"
+                   data-teachername="${escapeHtml(s.teacherName)}"
+                   data-teacherid="${escapeHtml(getTeacherId(s))}"
+                   title="Delete this subject assignment"></i>
+              </td>
+            </tr>
+          `).join('')
+        : `
+          <tr>
+            <td colspan="5">
+              <div class="modal-empty-state">
+                <i class="fas fa-inbox"></i>
+                <p>No subjects assigned to this class</p>
+              </div>
+            </td>
+          </tr>
+        `;
+
+      const modalContent = `
+        <div class="info-summary-grid">
+          <div class="info-summary-item"><strong><i class="fas fa-tag"></i> Class ID:</strong> <span>${escapeHtml(cls.classId)}</span></div>
+          <div class="info-summary-item"><strong><i class="fas fa-calendar"></i> Session:</strong> <span>${escapeHtml(cls.session)}</span></div>
+          <div class="info-summary-item"><strong><i class="fas fa-chart-line"></i> Grade:</strong> <span>${escapeHtml(cls.grade)}</span></div>
+          <div class="info-summary-item"><strong><i class="fas fa-layer-group"></i> Section:</strong> <span>${escapeHtml(cls.section)}</span></div>
+          <div class="info-summary-item"><strong><i class="fas fa-book-open"></i> Total Subjects:</strong> <span><strong style="color:#2563eb;">${cls.subjects.length}</strong> assigned</span></div>
+          <div class="info-summary-item"><strong><i class="fas fa-flag"></i> Class Type:</strong> <span><span class="class-type-badge ${typeClass}">${typeLabel}</span></span></div>
+        </div>
+        <div class="modal-subject-table-wrap">
+          <h4><i class="fas fa-book"></i> Assigned Subjects & Teachers</h4>
+          <div class="table-wrapper" style="border:1.5px solid #e2e8f0;">
+            <table class="modal-subject-table">
+              <thead>
+                <tr>
+                  <th>#</th>
+                  <th>Subject Name</th>
+                  <th>Teacher Name</th>
+                  <th>Teacher ID</th>
+                  <th style="text-align:center;">Action</th>
+                </tr>
+              </thead>
+              <tbody>
+                ${subjectsHtml}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      `;
+
+      document.getElementById('classModalDynamicContent').innerHTML = modalContent;
+      document.getElementById('modalClassTitle').innerHTML =
+        `<i class="fas fa-chalkboard-user"></i> ${escapeHtml(cls.className)} — Subjects`;
+      document.getElementById('classModalOverlay').classList.add('active');
+
+      // Internal delete listeners
+      document.querySelectorAll('.subject-delete-icon').forEach(icon => {
+        icon.addEventListener('click', (e) => {
+          e.stopPropagation();
+          openDeleteSubjectConfirmation({
+            classId: icon.dataset.classid,
+            subjectName: icon.dataset.subjectname,
+            teacherName: icon.dataset.teachername,
+            teacherId: icon.dataset.teacherid
+          });
+        });
+      });
+    }
+
+    function closeClassModal() {
+      document.getElementById('classModalOverlay').classList.remove('active');
+    }
+
+    document.getElementById('closeModalBtn').addEventListener('click', closeClassModal);
+    document.getElementById('modalFooterCloseBtn').addEventListener('click', closeClassModal);
+    document.getElementById('classModalOverlay').addEventListener('click', (e) => {
+      if (e.target === document.getElementById('classModalOverlay')) closeClassModal();
+    });
+
+    // ============================================
+    // DELETE CONFIRMATION MODAL
+    // ============================================
+    let pendingDelete = null; // { mode: 'class' | 'subject', classId, subjectName, teacherName, teacherId }
+
+    function openDeleteClassConfirmation(classId) {
+      const cls = groupedClasses.find(c => c.classId === classId);
+      if (!cls) return;
+
+      pendingDelete = { mode: 'class', classId };
+
+      document.getElementById('deleteModalTitle').innerHTML =
+        `Delete all subjects? <small>This action cannot be undone.</small>`;
+      document.getElementById('deleteModalMessage').innerHTML =
+        `This will permanently delete <strong>all ${cls.subjects.length} subject assignment${cls.subjects.length === 1 ? '' : 's'}</strong> from class <strong>${escapeHtml(cls.className)} (${escapeHtml(cls.classId)})</strong>.`;
+      document.getElementById('deleteModalWarningText').innerHTML =
+        `All subject-teacher assignments for this class will be <strong>permanently removed</strong> from the system.`;
+
+      document.getElementById('deleteModalOverlay').classList.add('active');
+    }
+
+    function openDeleteSubjectConfirmation({ classId, subjectName, teacherName, teacherId }) {
+      pendingDelete = { mode: 'subject', classId, subjectName, teacherName, teacherId };
+
+      document.getElementById('deleteModalTitle').innerHTML =
+        `Remove subject assignment? <small>This action cannot be undone.</small>`;
+      document.getElementById('deleteModalMessage').innerHTML =
+        `Are you sure you want to remove <strong>${escapeHtml(subjectName)}</strong>${teacherName ? ` (${escapeHtml(teacherName)})` : ''} from this class?`;
+      document.getElementById('deleteModalWarningText').innerHTML =
+        `This subject-teacher assignment will be <strong>permanently removed</strong> from the system.`;
+
+      document.getElementById('deleteModalOverlay').classList.add('active');
+    }
+
+    function closeDeleteModal() {
+      document.getElementById('deleteModalOverlay').classList.remove('active');
+      pendingDelete = null;
+    }
+
+    document.getElementById('cancelDeleteBtn').addEventListener('click', closeDeleteModal);
+
+    document.getElementById('confirmDeleteBtn').addEventListener('click', () => {
+      if (!pendingDelete) return;
+
+      const records = loadFromStorage('messSubjects');
+
+      if (pendingDelete.mode === 'class') {
+        const cid = pendingDelete.classId;
+        const before = records.length;
+        const updated = records.filter(r => r.classId !== cid);
+        const removed = before - updated.length;
+
+        saveToStorage('messSubjects', updated);
+        showToast(`🗑️ Deleted all ${removed} subject${removed === 1 ? '' : 's'} from class ${cid}`, 'success');
+      } else if (pendingDelete.mode === 'subject') {
+        const { classId, subjectName, teacherName } = pendingDelete;
+        const before = records.length;
+        const updated = records.filter(r =>
+          !(r.classId === classId && r.subjectName === subjectName && r.teacherName === teacherName)
+        );
+        const removed = before - updated.length;
+
+        if (removed === 0) {
+          showToast('⚠️ Subject assignment not found', 'error');
+          closeDeleteModal();
+          return;
+        }
+        saveToStorage('messSubjects', updated);
+        showToast(`✅ Removed "${subjectName}" from class`, 'success');
+      }
+
+      closeDeleteModal();
+
+      // Refresh table
+      applyFilters();
+
+      // If view modal is open, re-open with fresh data (or close if class is gone)
+      const viewOverlay = document.getElementById('classModalOverlay');
+      if (viewOverlay.classList.contains('active')) {
+        const currentClassId = (pendingDelete && pendingDelete.classId) || null;
+        const stillExists = groupedClasses.find(c => c.classId === (pendingDelete ? pendingDelete.classId : ''));
+        closeClassModal();
+        if (pendingDelete && pendingDelete.mode === 'subject' && pendingDelete.classId) {
+          setTimeout(() => {
+            const exists = buildGroupsViewModel().find(c => c.classId === pendingDelete.classId);
+            if (exists) openClassDetailPanel(pendingDelete.classId);
+          }, 50);
+        }
+      }
+    });
+
+    // Overlay close
+    document.getElementById('deleteModalOverlay').addEventListener('click', function(e) {
+      if (e.target === this) closeDeleteModal();
+    });
+
+    // Escape closes modals
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') {
+        if (document.getElementById('deleteModalOverlay').classList.contains('active')) {
+          closeDeleteModal();
+        } else if (document.getElementById('classModalOverlay').classList.contains('active')) {
+          closeClassModal();
+        }
+      }
+    });
+
+    // ===== Filter / Search Listeners =====
+    document.addEventListener('DOMContentLoaded', function() {
+      const searchInput = document.getElementById('searchInput');
+      const clearBtn = document.getElementById('clearSearchBtn');
+      const typeFilter = document.getElementById('classTypeFilter');
+
+      if (searchInput) {
+        searchInput.addEventListener('input', applyFilters);
+        searchInput.addEventListener('keydown', function(e) {
+          if (e.key === 'Escape') {
+            this.value = '';
+            applyFilters();
+            this.blur();
+          }
+        });
+      }
+
+      if (clearBtn) {
+        clearBtn.addEventListener('click', function() {
+          if (searchInput) {
+            searchInput.value = '';
+            applyFilters();
+            searchInput.focus();
+          }
+        });
+      }
+
+      if (typeFilter) {
+        typeFilter.addEventListener('change', applyFilters);
+      }
+
+      // Ctrl+K shortcut
+      document.addEventListener('keydown', (e) => {
+        if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'k') {
+          e.preventDefault();
+          if (searchInput) searchInput.focus();
+        }
+      });
+    });
+  </script>
+</body>
+</html>
