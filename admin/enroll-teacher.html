@@ -808,6 +808,10 @@
                   id="subjectInput"
                   placeholder="Type subject & press Enter"
                   autocomplete="off"
+                  autocorrect="off"
+                  autocapitalize="none"
+                  spellcheck="false"
+                  enterkeyhint="done"
                 >
               </div>
               <input type="hidden" id="subjectsHidden" name="subjects">
@@ -1099,7 +1103,7 @@
     const wrap = document.getElementById('subjectTagWrap');
     const input = document.getElementById('subjectInput');
 
-    // Clicking the wrap focuses the input
+    // Focus input when clicking empty area of the wrapper
     wrap.addEventListener('click', (e) => {
       if (e.target === wrap) input.focus();
     });
@@ -1115,31 +1119,76 @@
       }
     });
 
-    // Prevent spaces from being typed at all
+    // -------- COMMIT HELPER (used by multiple mobile-friendly events) --------
+    function commitPending() {
+      const val = input.value.trim();
+      if (val) {
+        addSubject(val);
+        input.value = '';
+      }
+    }
+
+    // -------- KEYDOWN (desktop + many mobile keyboards) --------
     input.addEventListener('keydown', (e) => {
-      if (e.key === ' ') {
+      // Space -> block (desktop)
+      if (e.key === ' ' || e.key === 'Spacebar') {
         e.preventDefault();
         return;
       }
-
+      // Enter or comma -> commit
       if (e.key === 'Enter' || e.key === ',') {
         e.preventDefault();
-        const val = input.value.trim();
-        if (val) {
-          addSubject(val);
-          input.value = '';
-        }
+        commitPending();
         return;
       }
-
-      // Backspace on empty input removes the last tag
+      // Some Android keyboards report Enter as keyCode 13 with key "Unidentified"
+      if (e.keyCode === 13) {
+        e.preventDefault();
+        commitPending();
+        return;
+      }
+      // Backspace on empty -> remove last tag
       if (e.key === 'Backspace' && input.value === '' && subjectsList.length > 0) {
         subjectsList.pop();
         renderSubjects();
       }
     });
 
-    // Also strip spaces on paste
+    // -------- BEFOREINPUT (mobile IME — most reliable on Android/iOS) --------
+    input.addEventListener('beforeinput', (e) => {
+      // Android "Go"/"Done"/"Enter" key
+      if (e.inputType === 'insertLineBreak' || e.inputType === 'insertParagraph') {
+        e.preventDefault();
+        commitPending();
+        return;
+      }
+      if (e.inputType === 'insertText') {
+        // Comma -> commit
+        if (e.data === ',') {
+          e.preventDefault();
+          commitPending();
+          return;
+        }
+        // Space -> block
+        if (e.data === ' ') {
+          e.preventDefault();
+          return;
+        }
+      }
+    });
+
+    // -------- BLUR (user taps away / keyboard closes) --------
+    // This is the KEY fix for mobile — commit whatever text is typed
+    input.addEventListener('blur', () => {
+      commitPending();
+    });
+
+    // -------- CHANGE (extra fallback for older browsers) --------
+    input.addEventListener('change', () => {
+      commitPending();
+    });
+
+    // -------- INPUT (belt-and-braces space strip) --------
     input.addEventListener('input', () => {
       if (/\s/.test(input.value)) {
         input.value = input.value.replace(/\s+/g, '');
