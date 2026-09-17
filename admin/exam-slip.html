@@ -1,0 +1,1726 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>MEI – Manage Exam Slip</title>
+  <link rel="icon" type="image/png" href="logo2.png">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="../components.css">
+  <link rel="stylesheet" href="../responsive-components.css">
+  <style>
+    /* ============================================
+       INTERNAL CSS - Unified Design System
+       Based on: styles.css / enroll.css / view-details.css
+       Blue Theme | Full Width | Responsive
+       ============================================ */
+
+    /* ===== RESET & GLOBAL ===== */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Segoe UI', Roboto, system-ui, sans-serif;
+    }
+
+    html, body {
+      width: 100%;
+      height: 100%;
+      overflow-x: hidden;
+    }
+
+    body {
+      background: #f8fafc;        /* soft cool slate */
+      color: #0f172a;
+      line-height: 1.6;
+    }
+
+    /* ===== APP CONTAINER - FULL WIDTH ===== */
+    .app-wrapper {
+      display: flex;
+      min-height: 100vh;
+      width: 100%;
+    }
+
+    /* ===== MAIN PANEL - FULL WIDTH ===== */
+    .main-panel {
+      flex: 1;
+      padding: 24px 32px;
+      width: 100%;
+      max-width: 100%;
+      min-width: 0;
+      transition: all 0.3s ease;
+      background: #f8fafc;        /* same cool slate explicitly set */
+    }
+
+    /* ===== PAGE HEADER - FULL WIDTH ===== */
+    .page-header {
+      background: white;           /* white on top of slate */
+      padding: 24px 32px;
+      margin-bottom: 28px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.04);
+      border: 1px solid #e9eef3;
+      width: 100%;
+    }
+
+    .page-header h1 {
+      font-size: 28px;
+      font-weight: 700;
+      background: linear-gradient(135deg, #1e3a8a, #2563eb);
+      background-clip: text;
+      -webkit-background-clip: text;
+      color: transparent;
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+
+    .page-header h1 i {
+      color: #2563eb;
+      background: none;
+      -webkit-text-fill-color: #2563eb;
+    }
+
+    .page-header p {
+      color: #475569;
+      margin-top: 8px;
+      font-size: 15px;
+      border-left: 3px solid #3b82f6;
+      padding-left: 16px;
+    }
+
+    /* ===== CARDS ===== */
+    .card {
+      background: white;
+      padding: 40px;
+      box-shadow: 0 4px 25px rgba(0, 0, 0, 0.07);
+      border: 1px solid #f1f5f9;
+      margin-bottom: 28px;
+      width: 100%;
+    }
+
+    /* New data-card (requested) */
+    .data-card {
+      background: #ffffff;
+      border: 1px solid #edf2f7;
+      box-shadow: 0 12px 30px rgba(0, 0, 0, 0.05);
+      padding: 40px;
+      margin-bottom: 28px;
+      width: 100%;
+    }
+
+    .card-title {
+      font-size: 19px;
+      font-weight: 700;
+      color: #1e293b;
+      margin-bottom: 28px;
+      padding-bottom: 16px;
+      border-bottom: 2px solid #e5e7eb;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .card-title i {
+      color: #2563eb;
+      font-size: 22px;
+    }
+
+    /* New card-header (requested) */
+    .card-header {
+      background: #fefefe;         /* near-white */
+      border-bottom: 1px solid #eef2f8;
+      padding-bottom: 16px;
+      margin-bottom: 28px;
+      font-size: 19px;
+      font-weight: 700;
+      color: #1e293b;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .card-header i {
+      color: #2563eb;
+      font-size: 22px;
+    }
+
+    /* table-wrapper (requested) */
+    .table-wrapper {
+      background: #ffffff;
+      border: 1px solid #e2e8f0;
+      padding: 20px;
+      width: 100%;
+    }
+
+    /* ===== GRID LAYOUTS ===== */
+    .form-grid-5cols {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 24px;
+    }
+
+    /* ===== FORM GROUPS ===== */
+    .form-group {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .form-group label {
+      font-size: 14.5px;
+      font-weight: 600;
+      color: #334155;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .form-group label i {
+      color: #2563eb;
+      width: 18px;
+      text-align: center;
+    }
+
+    .req {
+      color: #ef4444;
+      margin-left: 3px;
+    }
+
+    /* ===== FORM CONTROLS ===== */
+    .form-control {
+      padding: 14px 16px;
+      border: 1.5px solid #e2e8f0;
+      font-size: 15.2px;
+      color: #1e293b;
+      transition: all 0.25s;
+      background: white;
+      width: 100%;
+      border-radius: 0;
+    }
+
+    .form-control:focus {
+      outline: none;
+      border-color: #3b82f6;
+      box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.12);
+    }
+
+    .form-control:disabled,
+    .form-control[readonly] {
+      background: #f8fafc;
+      color: #64748b;
+      cursor: not-allowed;
+    }
+
+    select.form-control {
+      cursor: pointer;
+    }
+
+    /* ===== FEE TYPE INPUT GROUP (Exam Type dropdown+manual) ===== */
+    .fee-type-wrap {
+      position: relative;
+      width: 100%;
+    }
+
+    .fee-type-wrap input {
+      padding-right: 36px;
+    }
+
+    .fee-type-toggle {
+      position: absolute;
+      right: 8px;
+      top: 50%;
+      transform: translateY(-50%);
+      background: none;
+      border: none;
+      color: #94a3b8;
+      cursor: pointer;
+      font-size: 13px;
+      padding: 6px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: color 0.2s;
+    }
+
+    .fee-type-toggle:hover {
+      color: #2563eb;
+    }
+
+    .fee-type-menu {
+      position: absolute;
+      top: calc(100% + 4px);
+      left: 0;
+      right: 0;
+      background: white;
+      border: 1.5px solid #e2e8f0;
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
+      z-index: 100;
+      max-height: 220px;
+      overflow-y: auto;
+      display: none;
+    }
+
+    .fee-type-menu.open {
+      display: block;
+    }
+
+    .fee-type-menu button {
+      display: block;
+      width: 100%;
+      text-align: left;
+      padding: 10px 14px;
+      font-size: 14px;
+      color: #1e293b;
+      background: white;
+      border: none;
+      border-bottom: 1px solid #f1f5f9;
+      cursor: pointer;
+      transition: background 0.15s;
+      font-family: inherit;
+    }
+
+    .fee-type-menu button:last-child {
+      border-bottom: none;
+    }
+
+    .fee-type-menu button:hover {
+      background: #eff6ff;
+      color: #1d4ed8;
+    }
+
+    /* ============================================
+       SEARCHABLE TEACHER DROPDOWN
+       ============================================ */
+    .teacher-search-wrap {
+      position: relative;
+      width: 100%;
+    }
+
+    .teacher-search-btn {
+      width: 100%;
+      padding: 14px 40px 14px 16px;
+      border: 1.5px solid #e2e8f0;
+      background: white;
+      font-size: 15.2px;
+      color: #1e293b;
+      text-align: left;
+      cursor: pointer;
+      transition: all 0.25s;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      font-family: inherit;
+      /* Force same height as .form-control (padding 14px top/bottom + font) */
+      min-height: 54px;
+    }
+
+    .teacher-search-btn:hover {
+      border-color: #cbd5e1;
+    }
+
+    .teacher-search-btn:focus {
+      outline: none;
+      border-color: #3b82f6;
+      box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.12);
+    }
+
+    .teacher-search-btn.placeholder {
+      color: #94a3b8;
+    }
+
+    .teacher-search-btn .caret {
+      color: #94a3b8;
+      font-size: 12px;
+      flex-shrink: 0;
+      transition: transform 0.2s;
+    }
+
+    .teacher-search-wrap.open .teacher-search-btn .caret {
+      transform: rotate(180deg);
+      color: #2563eb;
+    }
+
+    .teacher-search-panel {
+      position: absolute;
+      top: calc(100% + 4px);
+      left: 0;
+      right: 0;
+      background: white;
+      border: 1.5px solid #e2e8f0;
+      box-shadow: 0 12px 30px rgba(0, 0, 0, 0.12);
+      z-index: 200;
+      display: none;
+      max-height: 320px;
+      flex-direction: column;
+    }
+
+    .teacher-search-wrap.open .teacher-search-panel {
+      display: flex;
+    }
+
+    .teacher-search-input-wrap {
+      position: relative;
+      border-bottom: 1.5px solid #e2e8f0;
+      flex-shrink: 0;
+    }
+
+    .teacher-search-input-wrap i {
+      position: absolute;
+      left: 14px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: #94a3b8;
+      font-size: 13px;
+      pointer-events: none;
+    }
+
+    .teacher-search-input {
+      width: 100%;
+      padding: 12px 14px 12px 36px;
+      border: none;
+      font-size: 14px;
+      color: #1e293b;
+      background: #f8fafc;
+      outline: none;
+      font-family: inherit;
+    }
+
+    .teacher-search-input:focus {
+      background: white;
+    }
+
+    .teacher-search-list {
+      overflow-y: auto;
+      max-height: 260px;
+      -webkit-overflow-scrolling: touch;
+    }
+
+    .teacher-search-item {
+      padding: 11px 16px;
+      font-size: 14px;
+      color: #1e293b;
+      cursor: pointer;
+      border-bottom: 1px solid #f1f5f9;
+      transition: background 0.15s;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+    }
+
+    .teacher-search-item:last-child {
+      border-bottom: none;
+    }
+
+    .teacher-search-item:hover {
+      background: #eff6ff;
+      color: #1d4ed8;
+    }
+
+    .teacher-search-item.selected {
+      background: #dbeafe;
+      color: #1e40af;
+      font-weight: 600;
+    }
+
+    .teacher-search-item .tid {
+      font-size: 11.5px;
+      color: #64748b;
+      font-family: 'Courier New', monospace;
+      font-weight: 600;
+      background: #f1f5f9;
+      padding: 2px 8px;
+      flex-shrink: 0;
+    }
+
+    .teacher-search-empty {
+      padding: 18px 16px;
+      text-align: center;
+      font-size: 13px;
+      color: #94a3b8;
+      font-style: italic;
+    }
+
+    /* ===== EXAM SECTION ===== */
+    .exam-section {
+      background: #f8fafc;
+      padding: 28px;
+      margin: 30px 0;
+      border: 1px solid #e2e8f0;
+    }
+
+    /* Exam Row - Horizontal Layout with aligned fields */
+    .exam-row {
+      display: grid;
+      grid-template-columns: 1.2fr 1fr 0.8fr 0.9fr 1.2fr auto;
+      gap: 16px;
+      align-items: end;
+      background: white;
+      padding: 18px;
+      border: 1.5px solid #e2e8f0;
+      margin-bottom: 14px;
+    }
+
+    .exam-row .form-group {
+      margin-bottom: 0;
+      /* Ensure all form-groups stretch to same height */
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+    }
+
+    /* Force all input-like elements inside exam-row to have exactly the same height */
+    .exam-row .form-control,
+    .exam-row .teacher-search-btn {
+      height: 52px;
+      min-height: 52px;
+      padding-top: 0;
+      padding-bottom: 0;
+      display: flex;
+      align-items: center;
+    }
+
+    .exam-row input[type="date"].form-control,
+    .exam-row input[type="time"].form-control {
+      height: 52px;
+    }
+
+    .exam-row .teacher-search-btn {
+      padding: 0 40px 0 16px;
+      justify-content: space-between;
+    }
+
+    .exam-row .btn-remove {
+      /* Align with the bottom of the inputs */
+      height: 52px;
+      width: 52px;
+      margin-bottom: 0;
+    }
+
+    /* Remove icon spacing from exam-row labels only */
+    .exam-row .form-group label {
+      gap: 0;
+    }
+
+    /* ===== REMOVE & ADD BUTTONS ===== */
+    .btn-remove {
+      background: #fee2e2;
+      color: #ef4444;
+      border: none;
+      width: 42px;
+      height: 42px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.25s;
+      font-size: 18px;
+      flex-shrink: 0;
+    }
+
+    .btn-remove:hover {
+      background: #fecaca;
+      transform: scale(1.08);
+    }
+
+    .btn-add {
+      background: #f8fafc;
+      color: #334155;
+      border: 2px dashed #94a3b8;
+      padding: 16px;
+      width: 100%;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.25s;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      font-size: 15.5px;
+      margin-top: 8px;
+    }
+
+    .btn-add:hover {
+      background: #f1f5f9;
+      border-color: #3b82f6;
+    }
+
+    .btn-add i {
+      color: #2563eb;
+    }
+
+    /* ===== BUTTONS ===== */
+    .btn-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 14px;
+      margin-top: 40px;
+      padding-top: 28px;
+      border-top: 1px solid #e5e7eb;
+    }
+
+    .btn {
+      padding: 13px 28px;
+      border: none;
+      font-size: 15.5px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.25s;
+      display: inline-flex;
+      align-items: center;
+      gap: 9px;
+      text-decoration: none;
+      border-radius: 0;
+    }
+
+    .btn i {
+      color: inherit;
+    }
+
+    .btn-primary {
+      background: #2563eb;
+      color: white;
+    }
+
+    .btn-primary i {
+      color: white;
+    }
+
+    .btn-primary:hover {
+      background: #1d4ed8;
+      transform: translateY(-2px);
+      box-shadow: 0 8px 20px rgba(37, 99, 235, 0.3);
+    }
+
+    .btn-secondary {
+      background: #f8fafc;
+      color: #334155;
+      border: 1.5px solid #e2e8f0;
+    }
+
+    .btn-secondary i {
+      color: #2563eb;
+    }
+
+    .btn-secondary:hover {
+      background: #f1f5f9;
+      border-color: #cbd5e1;
+    }
+
+    /* ===== TOAST NOTIFICATIONS ===== */
+    .toast-msg {
+      position: fixed;
+      bottom: 28px;
+      right: 28px;
+      background: #1f2937;
+      color: white;
+      padding: 12px 24px;
+      font-size: 13.5px;
+      z-index: 2200;
+      box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      animation: slideUp 0.35s ease;
+      border-radius: 0;
+      max-width: 480px;
+    }
+
+    .toast-msg i {
+      color: #3b82f6;
+      font-size: 18px;
+    }
+
+    @keyframes slideUp {
+      0% {
+        opacity: 0;
+        transform: translateY(40px);
+      }
+      100% {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    /* ============================================
+       FULLY RESPONSIVE BREAKPOINTS
+       ============================================ */
+
+    /* ===== LARGE DESKTOP (1200px and below) ===== */
+    @media (max-width: 1200px) {
+      .form-grid-5cols {
+        grid-template-columns: repeat(3, 1fr);
+      }
+    }
+
+    /* ===== TABLET / SMALL DESKTOP (992px and below) ===== */
+    @media (max-width: 992px) {
+      .main-panel {
+        padding: 20px 16px;
+      }
+
+      .page-header {
+        padding: 20px 24px;
+      }
+
+      .page-header h1 {
+        font-size: 24px;
+      }
+
+      .page-header p {
+        font-size: 14px;
+      }
+
+      .card,
+      .data-card {
+        padding: 32px 24px;
+      }
+
+      .card-title,
+      .card-header {
+        font-size: 17px;
+      }
+
+      .exam-row {
+        grid-template-columns: 1fr 1fr 1fr;
+        gap: 14px;
+      }
+
+      .exam-row .form-group:nth-child(5) {
+        grid-column: span 2;
+      }
+
+      .exam-row .btn-remove {
+        grid-column: span 1;
+      }
+    }
+
+    /* ===== MOBILE (768px and below) ===== */
+    @media (max-width: 768px) {
+      .main-panel {
+        padding: 16px 12px;
+      }
+
+      .page-header {
+        padding: 16px 18px;
+        margin-bottom: 20px;
+      }
+
+      .page-header h1 {
+        font-size: 20px;
+        gap: 10px;
+      }
+
+      .page-header h1 i {
+        font-size: 20px;
+      }
+
+      .page-header p {
+        font-size: 13px;
+        padding-left: 10px;
+        margin-top: 4px;
+      }
+
+      .card,
+      .data-card {
+        padding: 24px 16px;
+      }
+
+      .card-title,
+      .card-header {
+        font-size: 16px;
+        margin-bottom: 20px;
+        padding-bottom: 12px;
+      }
+
+      .card-title i,
+      .card-header i {
+        font-size: 18px;
+      }
+
+      /* All grids become single column */
+      .form-grid-5cols {
+        grid-template-columns: 1fr;
+        gap: 16px;
+      }
+
+      /* Exam Section */
+      .exam-section {
+        padding: 16px;
+        margin: 20px 0;
+      }
+
+      /* Exam Row - Mobile: 2 columns horizontal */
+      .exam-row {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 10px;
+        padding: 14px;
+        margin-bottom: 12px;
+      }
+
+      .exam-row .form-group {
+        margin-bottom: 0;
+      }
+
+      .exam-row .form-group label {
+        font-size: 12px;
+        font-weight: 600;
+        color: #334155;
+        display: flex;
+        align-items: center;
+        gap: 0;
+      }
+
+      .exam-row .form-control,
+      .exam-row .teacher-search-btn {
+        padding: 8px 10px;
+        font-size: 13px;
+        width: 100%;
+        height: 42px;
+        min-height: 42px;
+      }
+
+      .exam-row input[type="date"].form-control,
+      .exam-row input[type="time"].form-control {
+        height: 42px;
+      }
+
+      .exam-row .teacher-search-btn {
+        padding: 0 32px 0 10px;
+      }
+
+      .exam-row .teacher-search-input {
+        padding: 8px 10px 8px 32px;
+        font-size: 13px;
+      }
+
+      .exam-row .teacher-search-item {
+        padding: 8px 10px;
+        font-size: 12.5px;
+      }
+
+      .exam-row .btn-remove {
+        grid-column: span 2;
+        width: 100%;
+        height: 34px;
+        font-size: 14px;
+        margin-top: 4px;
+      }
+
+      .btn-add {
+        padding: 14px;
+        font-size: 14px;
+      }
+
+      .btn-actions {
+        flex-direction: column;
+      }
+
+      .btn {
+        justify-content: center;
+        padding: 12px 20px;
+        font-size: 14px;
+      }
+
+      .form-control {
+        padding: 12px 14px;
+        font-size: 14px;
+      }
+
+      .form-group label {
+        font-size: 13.5px;
+      }
+
+      .form-group label i {
+        width: 16px;
+        font-size: 14px;
+      }
+
+      .toast-msg {
+        bottom: 20px;
+        right: 20px;
+        left: 20px;
+        padding: 14px 20px;
+        font-size: 14px;
+        text-align: center;
+        justify-content: center;
+        max-width: none;
+      }
+
+      .table-wrapper {
+        padding: 16px;
+      }
+    }
+
+    /* ===== SMALL MOBILE (480px and below) ===== */
+    @media (max-width: 480px) {
+      .main-panel {
+        padding: 12px 8px;
+      }
+
+      .page-header {
+        padding: 12px 14px;
+        margin-bottom: 16px;
+      }
+
+      .page-header h1 {
+        font-size: 17px;
+        gap: 8px;
+      }
+
+      .page-header h1 i {
+        font-size: 18px;
+      }
+
+      .page-header p {
+        font-size: 12px;
+        padding-left: 8px;
+      }
+
+      .card,
+      .data-card {
+        padding: 18px 12px;
+      }
+
+      .card-title,
+      .card-header {
+        font-size: 15px;
+      }
+
+      .card-title i,
+      .card-header i {
+        font-size: 16px;
+      }
+
+      .form-control {
+        padding: 10px 12px;
+        font-size: 13.5px;
+      }
+
+      .form-group label {
+        font-size: 13px;
+      }
+
+      .form-group label i {
+        width: 14px;
+        font-size: 13px;
+      }
+
+      .req {
+        font-size: 12px;
+      }
+
+      .exam-section {
+        padding: 12px;
+      }
+
+      .exam-row {
+        padding: 12px 10px;
+        gap: 8px;
+        grid-template-columns: 1fr 1fr;
+      }
+
+      .exam-row .form-group label {
+        font-size: 11px;
+      }
+
+      .exam-row .form-control,
+      .exam-row .teacher-search-btn {
+        padding: 6px 8px;
+        font-size: 12px;
+        height: 38px;
+        min-height: 38px;
+      }
+
+      .exam-row input[type="date"].form-control,
+      .exam-row input[type="time"].form-control {
+        height: 38px;
+      }
+
+      .exam-row .teacher-search-btn {
+        padding: 0 28px 0 8px;
+      }
+
+      .exam-row .teacher-search-input {
+        padding: 6px 8px 6px 28px;
+        font-size: 12px;
+      }
+
+      .exam-row .teacher-search-item {
+        padding: 6px 8px;
+        font-size: 12px;
+      }
+
+      .exam-row .btn-remove {
+        height: 30px;
+        font-size: 12px;
+        grid-column: span 2;
+      }
+
+      .btn-add {
+        padding: 12px;
+        font-size: 13px;
+      }
+
+      .btn {
+        padding: 10px 16px;
+        font-size: 13px;
+        gap: 6px;
+      }
+
+      .btn-actions {
+        gap: 10px;
+        margin-top: 28px;
+        padding-top: 20px;
+      }
+
+      .toast-msg {
+        padding: 10px 16px;
+        font-size: 12px;
+        bottom: 16px;
+        right: 16px;
+        left: 16px;
+      }
+
+      .table-wrapper {
+        padding: 12px;
+      }
+    }
+
+    /* ===== EXTRA SMALL (360px and below) ===== */
+    @media (max-width: 360px) {
+      .main-panel {
+        padding: 8px 4px;
+      }
+
+      .page-header {
+        padding: 10px 12px;
+      }
+
+      .page-header h1 {
+        font-size: 15px;
+      }
+
+      .page-header p {
+        font-size: 11px;
+        padding-left: 6px;
+      }
+
+      .card,
+      .data-card {
+        padding: 14px 10px;
+      }
+
+      .card-title,
+      .card-header {
+        font-size: 14px;
+      }
+
+      .form-control {
+        padding: 8px 10px;
+        font-size: 13px;
+      }
+
+      .btn {
+        padding: 8px 14px;
+        font-size: 12px;
+      }
+
+      .exam-section {
+        padding: 10px;
+      }
+
+      .exam-row {
+        padding: 10px 8px;
+        gap: 6px;
+        grid-template-columns: 1fr 1fr;
+      }
+
+      .exam-row .form-group label {
+        font-size: 10px;
+      }
+
+      .exam-row .form-control,
+      .exam-row .teacher-search-btn {
+        padding: 5px 6px;
+        font-size: 11px;
+        height: 34px;
+        min-height: 34px;
+      }
+
+      .exam-row input[type="date"].form-control,
+      .exam-row input[type="time"].form-control {
+        height: 34px;
+      }
+
+      .exam-row .teacher-search-btn {
+        padding: 0 24px 0 6px;
+      }
+
+      .exam-row .teacher-search-input {
+        padding: 5px 6px 5px 24px;
+        font-size: 11px;
+      }
+
+      .exam-row .teacher-search-item {
+        padding: 5px 6px;
+        font-size: 11px;
+      }
+
+      .exam-row .btn-remove {
+        height: 28px;
+        font-size: 11px;
+        grid-column: span 2;
+      }
+
+      .btn-add {
+        padding: 10px;
+        font-size: 12px;
+      }
+    }
+
+    /* ============================================
+       PRINT STYLES
+       ============================================ */
+    @media print {
+      .btn-actions,
+      .btn-add,
+      .btn-remove {
+        display: none !important;
+      }
+
+      .card,
+      .data-card {
+        box-shadow: none;
+        border: 1px solid #ddd;
+        page-break-inside: avoid;
+      }
+
+      .page-header {
+        box-shadow: none;
+        border: 1px solid #ddd;
+      }
+
+      .exam-section {
+        background: none;
+        border: 1px solid #ddd;
+      }
+
+      .exam-row {
+        border: 1px solid #ddd;
+        background: none;
+        page-break-inside: avoid;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- Header will be loaded here -->
+  <div id="header-placeholder"></div>
+
+  <div class="app-wrapper" id="appWrapper">
+    <!-- Sidebar will be loaded here -->
+    <div id="sidebar-placeholder"></div>
+
+    <!-- Main Content -->
+    <main class="main-panel">
+      <div class="page-header">
+        <h1><i class="fas fa-file-alt" style="color:#2563eb;"></i> Manage Exam Slip</h1>
+        <p>Assign exam schedule to specific classes</p>
+      </div>
+
+      <!-- Class Information -->
+      <div class="data-card">
+        <div class="card-header">
+          <i class="fas fa-chalkboard"></i> Class Information
+        </div>
+        <div class="form-grid-5cols">
+          <div class="form-group">
+            <label><i class="fas fa-chalkboard-teacher"></i> Class Name <span class="req">*</span></label>
+            <select class="form-control" id="classSelect" required onchange="fillClassDetails()">
+              <option value="">-- Select Class --</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label><i class="fas fa-id-card"></i> Class ID</label>
+            <input type="text" class="form-control" id="exam_classId" disabled placeholder="Auto-generated">
+          </div>
+          <div class="form-group">
+            <label><i class="fas fa-calendar-alt"></i> Session</label>
+            <input type="text" class="form-control" id="exam_session" disabled placeholder="Session">
+          </div>
+          <div class="form-group">
+            <label><i class="fas fa-layer-group"></i> Grade</label>
+            <input type="text" class="form-control" id="exam_grade" disabled placeholder="Grade">
+          </div>
+          <div class="form-group">
+            <label><i class="fas fa-tags"></i> Section</label>
+            <input type="text" class="form-control" id="exam_section" disabled placeholder="Section">
+          </div>
+        </div>
+        
+        <!-- Exam Type & Issue Date Section -->
+        <div class="exam-type-section" style="margin-top: 20px; padding-top: 20px; border-top: 2px dashed #e2e8f0; display: flex; gap: 20px; flex-wrap: wrap;">
+          <div class="form-group" style="flex: 1; min-width: 250px;">
+            <label><i class="fas fa-file-signature"></i> Exam Type <span class="req">*</span></label>
+            <div class="fee-type-wrap" id="examTypeWrap">
+              <input type="text" class="form-control" id="examTypeInput" placeholder="Type or pick exam type..." autocomplete="off" required>
+              <button type="button" class="fee-type-toggle" id="examTypeToggle" title="Show common exam types">
+                <i class="fas fa-chevron-down"></i>
+              </button>
+              <div class="fee-type-menu" id="examTypeMenu">
+                <button type="button" data-value="Mid Term">Mid Term</button>
+                <button type="button" data-value="Final Term">Final Term</button>
+                <button type="button" data-value="Weekly Test">Weekly Test</button>
+                <button type="button" data-value="Monthly Test">Monthly Test</button>
+                <button type="button" data-value="Quarterly Exam">Quarterly Exam</button>
+                <button type="button" data-value="Half Yearly">Half Yearly</button>
+                <button type="button" data-value="Annual Exam">Annual Exam</button>
+                <button type="button" data-value="Pre-Board">Pre-Board</button>
+                <button type="button" data-value="Board Exam">Board Exam</button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Slip Issue Date set by Admin -->
+          <div class="form-group" style="flex: 1; min-width: 250px;">
+            <label><i class="fas fa-calendar-day"></i> Slip Issue Date <span class="req">*</span></label>
+            <input type="date" class="form-control" id="examIssueDate" required style="border-color: #2563eb; background: #eff6ff;">
+          </div>
+        </div>
+      </div>
+
+      <div class="data-card">
+        <div class="card-header">
+          <i class="fas fa-calendar-check"></i> Exam Schedule Assignment
+        </div>
+        <div class="exam-section">
+          <div id="examRowsContainer"></div>
+          <button type="button" class="btn-add" id="addExamRowBtn"><i class="fas fa-plus"></i> Add Another Exam Entry</button>
+        </div>
+
+        <div class="btn-actions">
+          <button class="btn btn-primary" id="generateExamBtn"><i class="fas fa-save"></i> Generate & Assign Exam Slip</button>
+          <button type="button" class="btn btn-secondary" id="resetExamFormBtn"><i class="fas fa-undo"></i> Reset</button>
+          <a href="view-exam-slip.html" class="btn btn-secondary" id="viewExamSlipsBtn"><i class="fas fa-eye"></i> View All Exam Slips</a>
+          <a href="student-slip.html" class="btn btn-secondary" id="openStudentSlipBtn"><i class="fas fa-user-graduate"></i> View Student Slip</a>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <script src="../components.js"></script>
+  <script>
+    // Load Header and Sidebar
+    function loadComponents() {
+      fetch('header.html')
+        .then(response => response.text())
+        .then(data => {
+          const el = document.getElementById('header-placeholder');
+          if (el) el.innerHTML = data;
+        })
+        .catch(err => console.log('Notice: Running in standalone mode'));
+
+      fetch('sidebar.html')
+        .then(response => response.text())
+        .then(data => {
+          const el = document.getElementById('sidebar-placeholder');
+          if (el) el.innerHTML = data;
+        })
+        .catch(err => console.log('Notice: Running in standalone mode'));
+    }
+
+    window.onload = function() {
+      loadComponents();
+      setTimeout(() => {
+        if (typeof window.initHeaderAndSidebar === 'function') {
+          window.initHeaderAndSidebar();
+        }
+      }, 400);
+
+      // Default issue date to today
+      const issueInput = document.getElementById('examIssueDate');
+      if (issueInput && !issueInput.value) {
+        issueInput.value = new Date().toISOString().split('T')[0];
+      }
+
+      populateClassDropdown();
+      initializeExamRows();
+      initExamTypePicker();
+      populateTeacherOptions();
+    };
+
+    // ===== Storage Helpers =====
+    function loadFromStorage(key) {
+      try {
+        const stored = localStorage.getItem(key);
+        return stored ? JSON.parse(stored) : [];
+      } catch(e) { return []; }
+    }
+    function saveToStorage(key, data) {
+      try {
+        localStorage.setItem(key, JSON.stringify(data));
+      } catch(e) { console.error(e); }
+    }
+    function showToast(msg) {
+      let t = document.createElement('div');
+      t.className = 'toast-msg';
+      t.innerHTML = `<i class="fas fa-info-circle"></i> ${msg}`;
+      document.body.appendChild(t);
+      setTimeout(() => t.remove(), 2600);
+    }
+
+    function populateClassDropdown() {
+      const select = document.getElementById('classSelect');
+      const classes = loadFromStorage('messClasses');
+      if (classes && classes.length > 0) {
+        select.innerHTML = '<option value="">-- Select Class --</option>' +
+          classes.map(c => `<option value="${c.id}">${c.name}</option>`).join('');
+      } else {
+        select.innerHTML = '<option value="">-- No classes found --</option>';
+      }
+    }
+
+    // ================= FEE TYPE PICKER (Exam Type dropdown+manual) =================
+    function initExamTypePicker() {
+      const wrap = document.getElementById('examTypeWrap');
+      const input = document.getElementById('examTypeInput');
+      const toggle = document.getElementById('examTypeToggle');
+      const menu = document.getElementById('examTypeMenu');
+
+      // Toggle the dropdown menu
+      toggle.addEventListener('click', (e) => {
+        e.stopPropagation();
+        menu.classList.toggle('open');
+      });
+
+      // Click a menu option -> fill the input
+      menu.querySelectorAll('button').forEach(btn => {
+        btn.addEventListener('click', () => {
+          input.value = btn.getAttribute('data-value');
+          menu.classList.remove('open');
+          input.focus();
+        });
+      });
+
+      // Close the menu when clicking outside
+      document.addEventListener('click', (e) => {
+        if (!wrap.contains(e.target)) {
+          menu.classList.remove('open');
+        }
+      });
+
+      // Close menu on Escape
+      input.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape') {
+          menu.classList.remove('open');
+        }
+      });
+    }
+
+    // ===== Teacher data cache =====
+    let teachersCache = [];
+
+    function populateTeacherOptions() {
+      teachersCache = loadFromStorage('messTeachers');
+      // Exclude Inactive teachers
+      teachersCache = teachersCache.filter(t => (t.status || 'Active') === 'Active');
+      // Sort alphabetically by name for a nicer browsing experience
+      teachersCache.sort((a, b) => (a.teacherName || '').localeCompare(b.teacherName || ''));
+    }
+
+    function getTeacherByRegNo(regNo) {
+      return teachersCache.find(t => t.regNo === regNo) || null;
+    }
+
+    // ===== Searchable Teacher Dropdown =====
+    // Unique ID generator for each row instance
+    let teacherDropdownCounter = 0;
+
+    function getExamRowTemplate(data) {
+      const uid = 'tsd-' + (++teacherDropdownCounter);
+      const subject = data?.subject || '';
+      const date = data?.date || '';
+      const day = data?.day || '';
+      const time = data?.time || '';
+      const teacherRegNo = data?.teacherRegNo || '';
+      const teacherName = data?.teacher || '';
+      
+      const dayOptions = `<option value="">-- Select Day --</option>
+        <option value="Monday">Monday</option>
+        <option value="Tuesday">Tuesday</option>
+        <option value="Wednesday">Wednesday</option>
+        <option value="Thursday">Thursday</option>
+        <option value="Friday">Friday</option>
+        <option value="Saturday">Saturday</option>
+        <option value="Sunday">Sunday</option>`;
+
+      // Determine label / placeholder for teacher button
+      let teacherLabel = '-- Select Teacher --';
+      let btnClass = 'teacher-search-btn placeholder';
+      if (teacherName) {
+        teacherLabel = teacherName;
+        btnClass = 'teacher-search-btn';
+      }
+
+      return `<div class="exam-row">
+        <div class="form-group">
+          <label>Subject Name</label>
+          <input type="text" class="form-control exam-subject" placeholder="e.g. Mathematics" required value="${subject}">
+        </div>
+        <div class="form-group">
+          <label>Date</label>
+          <input type="date" class="form-control exam-date" required value="${date}">
+        </div>
+        <div class="form-group">
+          <label>Day</label>
+          <select class="form-control exam-day" required>
+            ${dayOptions}
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Time</label>
+          <input type="time" class="form-control exam-time" required value="${time}">
+        </div>
+        <div class="form-group">
+          <label>Teacher Name</label>
+          <div class="teacher-search-wrap" id="${uid}" data-selected-regno="${teacherRegNo}">
+            <button type="button" class="${btnClass}" onclick="toggleTeacherDropdown('${uid}')">
+              <span class="tsd-label">${teacherLabel}</span>
+              <i class="fas fa-chevron-down caret"></i>
+            </button>
+            <div class="teacher-search-panel">
+              <div class="teacher-search-input-wrap">
+                <i class="fas fa-search"></i>
+                <input type="text" class="teacher-search-input" placeholder="Type to filter teachers..." oninput="filterTeacherList('${uid}', this.value)" onkeydown="handleTeacherInputKey(event, '${uid}')">
+              </div>
+              <div class="teacher-search-list" id="${uid}-list"></div>
+            </div>
+          </div>
+        </div>
+        <button type="button" class="btn-remove"><i class="fas fa-times"></i></button>
+      </div>`;
+    }
+
+    // Open/close the dropdown panel
+    function toggleTeacherDropdown(uid) {
+      const wrap = document.getElementById(uid);
+      const isOpen = wrap.classList.contains('open');
+
+      // Close all other dropdowns first
+      document.querySelectorAll('.teacher-search-wrap.open').forEach(w => {
+        if (w.id !== uid) w.classList.remove('open');
+      });
+
+      if (isOpen) {
+        wrap.classList.remove('open');
+        return;
+      }
+
+      wrap.classList.add('open');
+      renderTeacherList(uid, '');
+
+      // Auto-focus the search input
+      const input = wrap.querySelector('.teacher-search-input');
+      if (input) {
+        input.value = '';
+        setTimeout(() => input.focus(), 30);
+      }
+    }
+
+    // Render teacher list inside a dropdown (filtered by searchTerm)
+    function renderTeacherList(uid, searchTerm) {
+      const wrap = document.getElementById(uid);
+      const listEl = document.getElementById(uid + '-list');
+      if (!wrap || !listEl) return;
+
+      const selectedRegNo = wrap.dataset.selectedRegno || '';
+      const term = (searchTerm || '').toLowerCase().trim();
+
+      const filtered = teachersCache.filter(t => {
+        if (!term) return true;
+        const name = (t.teacherName || '').toLowerCase();
+        const id = (t.regNo || '').toLowerCase();
+        return name.includes(term) || id.includes(term);
+      });
+
+      if (filtered.length === 0) {
+        listEl.innerHTML = `<div class="teacher-search-empty">No teachers match "${escapeHtml(searchTerm)}"</div>`;
+        return;
+      }
+
+      listEl.innerHTML = filtered.map(t => `
+        <div class="teacher-search-item ${t.regNo === selectedRegNo ? 'selected' : ''}"
+             onclick="selectTeacher('${uid}', '${escapeJs(t.regNo)}')">
+          <span>${escapeHtml(t.teacherName)}</span>
+          <span class="tid">${escapeHtml(t.regNo)}</span>
+        </div>
+      `).join('');
+    }
+
+    // Filter as the user types
+    function filterTeacherList(uid, value) {
+      renderTeacherList(uid, value);
+    }
+
+    // Keyboard support: Escape closes, Enter selects first match
+    function handleTeacherInputKey(e, uid) {
+      if (e.key === 'Escape') {
+        document.getElementById(uid).classList.remove('open');
+        e.target.blur();
+      } else if (e.key === 'Enter') {
+        e.preventDefault();
+        const firstItem = document.querySelector(`#${uid}-list .teacher-search-item`);
+        if (firstItem) firstItem.click();
+      }
+    }
+
+    // User picks a teacher from the list
+    function selectTeacher(uid, regNo) {
+      const wrap = document.getElementById(uid);
+      if (!wrap) return;
+
+      const teacher = getTeacherByRegNo(regNo);
+      if (!teacher) return;
+
+      // Update the button label
+      const btn = wrap.querySelector('.teacher-search-btn');
+      const label = wrap.querySelector('.tsd-label');
+      label.textContent = teacher.teacherName;
+      btn.classList.remove('placeholder');
+
+      // Store selected regNo on the wrapper (source of truth)
+      wrap.dataset.selectedRegno = regNo;
+
+      // Close the dropdown
+      wrap.classList.remove('open');
+    }
+
+    // Auto-fill Class Details & load existing date if available
+    function fillClassDetails() {
+      const classId = document.getElementById('classSelect').value;
+      const classIdField = document.getElementById('exam_classId');
+      const sessionField = document.getElementById('exam_session');
+      const gradeField = document.getElementById('exam_grade');
+      const sectionField = document.getElementById('exam_section');
+      const issueDateField = document.getElementById('examIssueDate');
+      const examTypeInput = document.getElementById('examTypeInput');
+
+      if (!classId) {
+        classIdField.value = "";
+        sessionField.value = "";
+        gradeField.value = "";
+        sectionField.value = "";
+        return;
+      }
+
+      const cls = loadFromStorage('messClasses').find(c => c.id === classId);
+      if (cls) {
+        classIdField.value = cls.id;
+        sessionField.value = cls.session || '';
+        gradeField.value = cls.grade || '';
+        sectionField.value = cls.section || '';
+
+        // Auto populate existing slip data if present
+        const examSlips = loadFromStorage('messExamSlips');
+        const existing = examSlips.find(s => s.classId === cls.id);
+        if (existing) {
+          if (existing.examType) examTypeInput.value = existing.examType;
+          if (existing.issueDate && issueDateField) issueDateField.value = existing.issueDate;
+          
+          // Load existing exam rows
+          if (existing.exams && existing.exams.length > 0) {
+            const container = document.getElementById('examRowsContainer');
+            container.innerHTML = '';
+            existing.exams.forEach(exam => {
+              addRowWithData(exam);
+            });
+            return;
+          }
+        }
+      } else {
+        classIdField.value = "";
+        sessionField.value = "";
+        gradeField.value = "";
+        sectionField.value = "";
+      }
+
+      // Reset rows to one empty row if no existing data
+      const container = document.getElementById('examRowsContainer');
+      container.innerHTML = '';
+      addRow();
+    }
+
+    const container = document.getElementById('examRowsContainer');
+    const addBtn = document.getElementById('addExamRowBtn');
+
+    function addRow() {
+      container.insertAdjacentHTML('beforeend', getExamRowTemplate());
+      // No default day selection - leave blank
+    }
+
+    function addRowWithData(data) {
+      container.insertAdjacentHTML('beforeend', getExamRowTemplate(data));
+      // Set the day value properly
+      const lastRow = container.lastElementChild;
+      const daySelect = lastRow.querySelector('.exam-day');
+      if (daySelect && data?.day) {
+        daySelect.value = data.day;
+      }
+    }
+
+    function removeRow(btn) {
+      if (container.children.length > 1) {
+        btn.closest('.exam-row').remove();
+      } else {
+        showToast('⚠️ At least one exam entry is required!');
+      }
+    }
+
+    // Event delegation for remove buttons
+    container.addEventListener('click', e => {
+      if (e.target.closest('.btn-remove')) {
+        removeRow(e.target.closest('.btn-remove'));
+      }
+    });
+
+    addBtn.addEventListener('click', addRow);
+
+    function initializeExamRows() {
+      container.innerHTML = '';
+      addRow();
+    }
+
+    // Close any open teacher dropdown when clicking outside
+    document.addEventListener('click', function(e) {
+      const anyOpen = document.querySelector('.teacher-search-wrap.open');
+      if (anyOpen && !anyOpen.contains(e.target)) {
+        anyOpen.classList.remove('open');
+      }
+    });
+
+    // Close on Escape globally
+    document.addEventListener('keydown', function(e) {
+      if (e.key === 'Escape') {
+        document.querySelectorAll('.teacher-search-wrap.open').forEach(w => w.classList.remove('open'));
+      }
+    });
+
+    document.getElementById('generateExamBtn').addEventListener('click', function(e) {
+      e.preventDefault();
+
+      const classId = document.getElementById('classSelect').value;
+      if (!classId) {
+        showToast('⚠️ Please select a class first');
+        return;
+      }
+
+      const cls = loadFromStorage('messClasses').find(c => c.id === classId);
+      if (!cls) {
+        showToast('⚠️ Class not found');
+        return;
+      }
+
+      // Get Exam Type
+      const examType = document.getElementById('examTypeInput').value.trim();
+      if (!examType) {
+        showToast('⚠️ Please select or type an Exam Type');
+        return;
+      }
+
+      // ISSUE DATE FIELD SET BY ADMIN
+      const issueDate = document.getElementById('examIssueDate').value;
+      if (!issueDate) {
+        showToast('⚠️ Please select an Issue Date');
+        return;
+      }
+
+      const rows = container.querySelectorAll('.exam-row');
+      const exams = [];
+      let valid = true;
+
+      rows.forEach(row => {
+        const subject = row.querySelector('.exam-subject').value.trim();
+        const date = row.querySelector('.exam-date').value;
+        const day = row.querySelector('.exam-day').value;
+        const time = row.querySelector('.exam-time').value;
+        
+        // Get teacher from searchable dropdown
+        const teacherWrap = row.querySelector('.teacher-search-wrap');
+        const teacherRegNo = teacherWrap ? (teacherWrap.dataset.selectedRegno || '') : '';
+        const teacher = getTeacherByRegNo(teacherRegNo);
+        const teacherName = teacher ? teacher.teacherName : '';
+
+        if (!subject || !date || !day || !time || !teacherRegNo) {
+          valid = false;
+          return;
+        }
+
+        exams.push({ 
+          subject, 
+          date, 
+          day, 
+          time, 
+          teacher: teacherName,
+          teacherRegNo: teacherRegNo
+        });
+      });
+
+      if (!valid || exams.length === 0) {
+        showToast('⚠️ Please fill every field in every exam entry');
+        return;
+      }
+
+      const examSlips = loadFromStorage('messExamSlips');
+      const record = {
+        classId: cls.id,
+        className: cls.name,
+        session: cls.session || '',
+        grade: cls.grade || '',
+        section: cls.section || '',
+        examType: examType,
+        issueDate: issueDate,
+        exams: exams,
+        generatedDate: new Date().toISOString()
+      };
+
+      const idx = examSlips.findIndex(s => s.classId === cls.id);
+      if (idx !== -1) examSlips[idx] = record;
+      else examSlips.push(record);
+
+      saveToStorage('messExamSlips', examSlips);
+      showToast(`✅ Exam slip saved! Issue Date: ${issueDate} (Type: ${examType})`);
+    });
+
+    document.getElementById('resetExamFormBtn').addEventListener('click', function(e) {
+      e.preventDefault();
+      document.getElementById('classSelect').value = '';
+      document.getElementById('examTypeInput').value = '';
+      document.getElementById('examIssueDate').value = new Date().toISOString().split('T')[0];
+      
+      const fields = ['exam_classId', 'exam_session', 'exam_grade', 'exam_section'];
+      fields.forEach(id => document.getElementById(id).value = '');
+      
+      container.innerHTML = '';
+      addRow();
+      showToast('🔄 Form has been reset');
+    });
+
+    // ===== Small utils =====
+    function escapeHtml(str) {
+      if (!str) return '';
+      return String(str).replace(/[&<>"']/g, m => ({
+        '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'
+      }[m]));
+    }
+
+    function escapeJs(str) {
+      if (!str) return '';
+      return String(str).replace(/\\/g, '\\\\').replace(/'/g, "\\'").replace(/"/g, '\\"');
+    }
+  </script>
+</body>
+</html>

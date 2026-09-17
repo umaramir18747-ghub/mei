@@ -1,0 +1,1541 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+  <title>MEI – Tests History</title>
+  <link rel="icon" type="image/png" href="../logo2.png">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="../components.css">
+  <link rel="stylesheet" href="../responsive-components.css">
+  <style>
+    /* ============================================
+       INTERNAL CSS - Unified Design System
+       Based on: class-details.html / attendance-details.html
+       Blue Theme | Full Width | Responsive
+       ============================================ */
+
+    /* ===== RESET & GLOBAL ===== */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Segoe UI', Roboto, system-ui, sans-serif;
+    }
+
+    body {
+      background: #f8fafc;
+      color: #1e293b;
+      line-height: 1.6;
+    }
+
+    .app-wrapper {
+      display: flex;
+      min-height: 100vh;
+      width: 100%;
+    }
+
+    .app-container {
+      display: flex;
+      min-height: 100vh;
+      width: 100%;
+      flex: 1;
+    }
+
+    /* ===== MAIN PANEL ===== */
+    .main-panel {
+      flex: 1;
+      padding: 32px;
+      width: 100%;
+      max-width: 100%;
+      min-width: 0;
+      background: #f8fafc;
+    }
+
+    /* ===== PAGE HEADER ===== */
+    .page-header {
+      background: white;
+      padding: 24px 32px;
+      margin-bottom: 28px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.04);
+      border: 1px solid #e9eef3;
+      width: 100%;
+    }
+
+    .page-header h1 {
+      font-size: 28px;
+      font-weight: 700;
+      background: linear-gradient(135deg, #1e3a8a, #2563eb);
+      background-clip: text;
+      -webkit-background-clip: text;
+      color: transparent;
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+
+    .page-header h1 i {
+      color: #2563eb;
+      background: none;
+      -webkit-text-fill-color: #2563eb;
+    }
+
+    .page-header p {
+      color: #475569;
+      margin-top: 8px;
+      font-size: 15px;
+      border-left: 3px solid #3b82f6;
+      padding-left: 16px;
+    }
+
+    /* ===== DATA CARD ===== */
+    .data-card {
+      background: white;
+      box-shadow: 0 12px 30px rgba(0, 0, 0, 0.05);
+      border: 1px solid #edf2f7;
+      overflow: hidden;
+      width: 100%;
+      margin-bottom: 28px;
+    }
+
+    .card-header {
+      padding: 20px 28px;
+      background: #fefefe;
+      border-bottom: 1px solid #eef2f8;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+
+    .card-header h2 {
+      font-size: 19px;
+      font-weight: 700;
+      color: #1e293b;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .card-header h2 i {
+      color: #2563eb;
+      font-size: 20px;
+    }
+
+    .badge-count {
+      background: #eef2ff;
+      padding: 4px 14px;
+      font-size: 13px;
+      font-weight: 700;
+      color: #1e40af;
+      border-radius: 0;
+      white-space: nowrap;
+    }
+
+    /* ===== FILTER SECTION ===== */
+    .filter-section {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+      padding: 16px 28px;
+      background: #f8fafc;
+      border-bottom: 1px solid #eef2f8;
+      align-items: flex-end;
+    }
+
+    .filter-group {
+      flex: 1;
+      min-width: 180px;
+    }
+
+    .filter-group label {
+      display: block;
+      font-size: 11px;
+      font-weight: 700;
+      color: #64748b;
+      text-transform: uppercase;
+      letter-spacing: 0.4px;
+      margin-bottom: 6px;
+    }
+
+    .filter-group select {
+      width: 100%;
+      padding: 10px 32px 10px 12px;
+      border: 1.5px solid #e2e8f0;
+      border-radius: 0;
+      font-size: 14px;
+      background: white;
+      color: #1e293b;
+      cursor: pointer;
+      transition: all 0.25s;
+      appearance: none;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='10' viewBox='0 0 12 12'%3E%3Cpath fill='%2364748b' d='M6 8L1 3h10z'/%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-position: right 10px center;
+    }
+
+    .filter-group select:focus {
+      outline: none;
+      border-color: #3b82f6;
+      box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.12);
+    }
+
+    .filter-group select:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+
+    .filter-reset-btn {
+      padding: 10px 20px;
+      background: #f1f5f9;
+      border: 1.5px solid #cbd5e1;
+      color: #475569;
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      white-space: nowrap;
+      border-radius: 0;
+    }
+
+    .filter-reset-btn:hover {
+      background: #e2e8f0;
+      border-color: #94a3b8;
+    }
+
+    .filter-reset-btn i {
+      color: #64748b;
+    }
+
+    /* ===== TABLE ===== */
+    .table-wrapper {
+      overflow-x: auto;
+      overflow-y: visible;
+      padding: 0;
+      -webkit-overflow-scrolling: touch;
+      width: 100%;
+      position: relative;
+      border-top: 1.5px solid #e2e8f0;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      table-layout: auto;
+      min-width: 100%;
+      white-space: nowrap;
+    }
+
+    th {
+      text-align: left;
+      padding: 16px 16px;
+      background: #2563eb;
+      font-weight: 700;
+      font-size: 12.5px;
+      color: white;
+      border-bottom: 2px solid #1d4ed8;
+      text-transform: uppercase;
+      letter-spacing: 0.4px;
+      white-space: nowrap;
+      position: sticky;
+      top: 0;
+      z-index: 10;
+    }
+
+    th i {
+      color: white;
+      margin-right: 6px;
+    }
+
+    td {
+      padding: 14px 16px;
+      border-bottom: 1px solid #f0f2f5;
+      font-size: 14px;
+      vertical-align: middle;
+      white-space: nowrap;
+      color: #1e293b;
+    }
+
+    td:last-child {
+      white-space: nowrap;
+    }
+
+    tr:hover {
+      background: #fafcff;
+    }
+
+    tbody tr:last-child td {
+      border-bottom: none;
+    }
+
+    /* ===== BADGES ===== */
+    .count-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 4px 12px;
+      font-size: 12.5px;
+      font-weight: 700;
+      white-space: nowrap;
+      border-radius: 0;
+    }
+
+    .count-badge.pct-badge {
+      background: #eef2ff;
+      color: #1e40af;
+      border: 1px solid #dbeafe;
+    }
+
+    .count-badge.students-badge {
+      background: #eef2ff;
+      color: #1e40af;
+      border: 1px solid #dbeafe;
+    }
+
+    .count-badge i {
+      font-size: 11px;
+    }
+
+    /* ===== PERCENTAGE BADGES ===== */
+    .pct-badge {
+      display: inline-block;
+      padding: 4px 10px;
+      font-size: 12px;
+      font-weight: 700;
+      white-space: nowrap;
+      border-radius: 0;
+      text-align: center;
+      min-width: 55px;
+    }
+
+    .pct-badge.pct-high {
+      background: #d1fae5;
+      color: #065f46;
+      border: 1px solid #a7f3d0;
+    }
+
+    .pct-badge.pct-medium {
+      background: #fef3c7;
+      color: #92400e;
+      border: 1px solid #fde68a;
+    }
+
+    .pct-badge.pct-low {
+      background: #fee2e2;
+      color: #991b1b;
+      border: 1px solid #fecaca;
+    }
+
+    /* ===== ACTION ICONS ===== */
+    .action-icons {
+      display: flex;
+      gap: 8px;
+      align-items: center;
+      justify-content: flex-end;
+      flex-wrap: nowrap;
+      white-space: nowrap;
+    }
+
+    .action-icons i {
+      width: 32px;
+      height: 32px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 13px;
+      cursor: pointer;
+      border: 1.5px solid #e2e8f0;
+      background: #f8fafc;
+      color: #475569;
+      border-radius: 0;
+      transition: all 0.2s ease;
+      flex-shrink: 0;
+    }
+
+    .action-icons i:hover {
+      transform: translateY(-1px);
+    }
+
+    .action-icons .view-icon:hover {
+      background: #dbeafe;
+      color: #1d4ed8;
+      border-color: #93c5fd;
+    }
+
+    .action-icons .delete-icon:hover {
+      background: #fee2e2;
+      color: #dc2626;
+      border-color: #fecaca;
+    }
+
+    #noResultsMessage {
+      text-align: center;
+      padding: 40px 20px;
+      color: #64748b;
+    }
+
+    #noResultsMessage i {
+      font-size: 32px;
+      display: block;
+      margin-bottom: 12px;
+      color: #94a3b8;
+    }
+
+    #noResultsMessage p:first-of-type {
+      font-size: 16px;
+      font-weight: 500;
+      color: #1e293b;
+    }
+
+    #noResultsMessage p:last-of-type {
+      font-size: 14px;
+    }
+
+    /* ============================================
+       MODAL STYLES
+       ============================================ */
+    .modal-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(15, 23, 42, 0.5);
+      backdrop-filter: blur(4px);
+      z-index: 2000;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      opacity: 0;
+      visibility: hidden;
+      transition: all 0.3s ease;
+    }
+
+    .modal-overlay.active {
+      opacity: 1;
+      visibility: visible;
+    }
+
+    .class-modal-container {
+      background: white;
+      width: 95%;
+      max-width: 1000px;
+      max-height: 90vh;
+      overflow-y: auto;
+      box-shadow: 0 20px 35px rgba(0, 0, 0, 0.2);
+      display: flex;
+      flex-direction: column;
+    }
+
+    .modal-header-custom {
+      padding: 20px 24px;
+      background: #2563eb;
+      color: white;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      position: sticky;
+      top: 0;
+      z-index: 10;
+      flex-shrink: 0;
+    }
+
+    .modal-header-custom h2 {
+      font-size: 18px;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      color: white;
+    }
+
+    .modal-header-custom h2 i {
+      color: white;
+    }
+
+    .close-modal-btn {
+      background: rgba(255, 255, 255, 0.15);
+      border: none;
+      width: 36px;
+      height: 36px;
+      font-size: 16px;
+      cursor: pointer;
+      color: white;
+      transition: all 0.2s;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      border-radius: 0;
+    }
+
+    .close-modal-btn:hover {
+      background: #ef4444;
+      color: white;
+    }
+
+    .info-summary-grid {
+      background: #f8fafc;
+      padding: 20px 28px;
+      border-bottom: 1px solid #ecf3fa;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px 24px;
+    }
+
+    .info-summary-item {
+      display: flex;
+      align-items: baseline;
+      gap: 10px;
+      font-size: 13.5px;
+      padding: 8px 0;
+      border-bottom: 1px dashed #e2e8f0;
+    }
+
+    .info-summary-item strong {
+      min-width: 130px;
+      color: #64748b;
+      font-weight: 600;
+      font-size: 12.5px;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .info-summary-item strong i {
+      color: #2563eb;
+      font-size: 12px;
+    }
+
+    .modal-subject-table-wrap {
+      padding: 20px 28px 28px;
+    }
+
+    .modal-subject-table-wrap h4 {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 16px;
+      font-weight: 700;
+      color: #1e293b;
+      margin-bottom: 16px;
+      padding-bottom: 12px;
+      border-bottom: 2px solid #e5e7eb;
+    }
+
+    .modal-subject-table-wrap h4 i {
+      color: #2563eb;
+    }
+
+    .modal-subject-table {
+      width: 100%;
+      border-collapse: collapse;
+      table-layout: auto;
+      min-width: 100%;
+    }
+
+    .modal-subject-table thead th {
+      background: #2563eb;
+      color: white;
+      font-size: 11px;
+      font-weight: 700;
+      padding: 12px 16px;
+      border-bottom: 2px solid #1d4ed8;
+      text-transform: uppercase;
+      letter-spacing: 0.3px;
+      text-align: left;
+      white-space: nowrap;
+    }
+
+    .modal-subject-table tbody td {
+      padding: 12px 16px;
+      font-size: 13.5px;
+      border-bottom: 1px solid #f1f5f9;
+      color: #1e293b;
+      font-weight: 500;
+      vertical-align: middle;
+      white-space: nowrap;
+    }
+
+    .modal-subject-table tbody tr:last-child td {
+      border-bottom: none;
+    }
+
+    .modal-subject-table tbody tr:hover {
+      background: #fafcff;
+    }
+
+    .modal-subject-table .idx-cell {
+      color: #94a3b8;
+      font-size: 13px;
+      width: 40px;
+    }
+
+    .modal-empty-state {
+      text-align: center;
+      padding: 48px 20px;
+      color: #94a3b8;
+    }
+
+    .modal-empty-state i {
+      font-size: 42px;
+      margin-bottom: 14px;
+      display: block;
+      color: #93c5fd;
+    }
+
+    .modal-empty-state p {
+      font-size: 14px;
+    }
+
+    /* ===== EDIT MARKS (inside modal) ===== */
+    .marks-input-edit {
+      width: 80px;
+      padding: 5px 8px;
+      border: 1.5px solid #2563eb;
+      font-size: 13.5px;
+      font-weight: 600;
+      color: #1e293b;
+      background: #f0f7ff;
+      border-radius: 0;
+    }
+
+    .marks-input-edit:focus {
+      outline: none;
+      box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.2);
+    }
+
+    .marks-display {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .marks-num {
+      font-weight: 700;
+      color: #1e293b;
+    }
+
+    .edit-action-btn {
+      padding: 6px 12px;
+      font-size: 12px;
+      font-weight: 600;
+      cursor: pointer;
+      border-radius: 0;
+      border: 1.5px solid transparent;
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      transition: all 0.2s;
+      font-family: inherit;
+    }
+
+    .edit-action-btn.edit-btn-sm {
+      background: #2563eb;
+      color: white;
+      border-color: #2563eb;
+    }
+
+    .edit-action-btn.edit-btn-sm:hover {
+      background: #1d4ed8;
+      border-color: #1d4ed8;
+      transform: translateY(-1px);
+    }
+
+    .edit-action-btn.edit-btn-sm i {
+      font-size: 11px;
+    }
+
+    .edit-action-btn.save-btn-sm {
+      background: #16a34a;
+      color: white;
+      border-color: #16a34a;
+    }
+
+    .edit-action-btn.save-btn-sm:hover {
+      background: #15803d;
+      border-color: #15803d;
+      transform: translateY(-1px);
+    }
+
+    .edit-action-btn.cancel-btn-sm {
+      background: #f1f5f9;
+      color: #334155;
+      border-color: #cbd5e1;
+    }
+
+    .edit-action-btn.cancel-btn-sm:hover {
+      background: #e2e8f0;
+      border-color: #94a3b8;
+    }
+
+    .modal-footer-custom {
+      padding: 16px 24px;
+      background: #f8fafc;
+      border-top: 1px solid #eef2f8;
+      text-align: right;
+      flex-shrink: 0;
+    }
+
+    .modal-footer-custom button {
+      background: #f1f5f9;
+      border: 1.5px solid #cbd5e1;
+      padding: 8px 20px;
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s;
+      border-radius: 0;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .modal-footer-custom button i {
+      color: #64748b;
+    }
+
+    .modal-footer-custom button:hover {
+      background: #ef4444;
+      color: white;
+      border-color: #ef4444;
+    }
+
+    .modal-footer-custom button:hover i {
+      color: white;
+    }
+
+    /* ===== TOAST ===== */
+    .toast-msg {
+      position: fixed;
+      bottom: 30px;
+      right: 30px;
+      background: #1e293b;
+      color: white;
+      padding: 16px 28px;
+      font-size: 15px;
+      font-weight: 500;
+      z-index: 2200;
+      box-shadow: 0 8px 30px rgba(0, 0, 0, 0.25);
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      animation: slideUp 0.35s ease;
+      max-width: 480px;
+      border-radius: 0;
+    }
+
+    .toast-msg i {
+      color: #3b82f6;
+      font-size: 20px;
+    }
+
+    @keyframes slideUp {
+      0% { opacity: 0; transform: translateY(40px); }
+      100% { opacity: 1; transform: translateY(0); }
+    }
+
+    /* ============================================
+       RESPONSIVE
+       ============================================ */
+    @media (max-width: 1024px) {
+      .main-panel { padding: 24px 20px; }
+      .page-header { padding: 20px 24px; }
+      .page-header h1 { font-size: 24px; }
+      .page-header p { font-size: 14px; }
+      .card-header { padding: 16px 20px; }
+      .card-header h2 { font-size: 17px; }
+      .filter-section { padding: 14px 20px; }
+      table { min-width: 1000px; width: auto; }
+      th, td { padding: 13px 14px; font-size: 13px; }
+    }
+
+    @media (max-width: 768px) {
+      .main-panel { padding: 20px 16px; }
+      .page-header { padding: 18px 20px; }
+      .page-header h1 { font-size: 21px; gap: 10px; }
+      .page-header p { font-size: 13.5px; padding-left: 12px; margin-top: 6px; }
+      .card-header {
+        padding: 14px 16px;
+        flex-direction: column;
+        align-items: stretch;
+      }
+      .card-header h2 { font-size: 16px; flex-wrap: wrap; }
+      .badge-count { font-size: 12px; padding: 3px 10px; }
+      .filter-section {
+        flex-direction: column;
+        gap: 10px;
+        padding: 14px 16px;
+      }
+      .filter-group { min-width: 100%; }
+      .filter-reset-btn { width: 100%; justify-content: center; }
+      table { min-width: 880px; width: auto; }
+      th { font-size: 11px; padding: 10px 10px; }
+      td { padding: 10px 10px; font-size: 12px; }
+      .action-icons { gap: 6px; }
+      .action-icons i { width: 28px; height: 28px; font-size: 11px; }
+      .class-modal-container { width: 96%; max-height: 94vh; }
+      .modal-header-custom { padding: 16px 20px; }
+      .modal-header-custom h2 { font-size: 16px; }
+      .close-modal-btn { width: 34px; height: 34px; font-size: 14px; }
+      .info-summary-grid {
+        grid-template-columns: 1fr;
+        padding: 16px 20px;
+        gap: 0;
+      }
+      .info-summary-item { padding: 6px 0; font-size: 12.5px; }
+      .info-summary-item strong { min-width: 110px; font-size: 11.5px; }
+      .modal-subject-table-wrap { padding: 16px 20px 20px; }
+      .modal-subject-table thead th { padding: 10px 12px; font-size: 10px; }
+      .modal-subject-table tbody td { padding: 10px 12px; font-size: 12px; }
+      .modal-footer-custom { padding: 14px 20px; }
+      .toast-msg {
+        bottom: 20px;
+        right: 20px;
+        left: 20px;
+        padding: 14px 20px;
+        font-size: 14px;
+        justify-content: center;
+        text-align: center;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .main-panel { padding: 16px 12px; }
+      .page-header { padding: 14px 16px; }
+      .page-header h1 { font-size: 18px; gap: 8px; }
+      .page-header h1 i { font-size: 17px; }
+      .page-header p { font-size: 12.5px; padding-left: 10px; }
+      .card-header { padding: 12px 14px; }
+      .card-header h2 { font-size: 14px; gap: 8px; }
+      .badge-count { font-size: 11px; padding: 3px 8px; }
+      table { min-width: 760px; width: auto; }
+      th { font-size: 10px; padding: 9px 8px; letter-spacing: 0; }
+      td { padding: 9px 8px; font-size: 11px; }
+      .action-icons { gap: 4px; }
+      .action-icons i { width: 26px; height: 26px; font-size: 10px; }
+      .count-badge { font-size: 11px; padding: 3px 9px; }
+      .pct-badge { font-size: 11px; padding: 3px 8px; min-width: 48px; }
+      .marks-input-edit { width: 60px; font-size: 12px; }
+      .edit-action-btn { padding: 5px 10px; font-size: 11px; }
+      .modal-header-custom { padding: 14px 16px; }
+      .modal-header-custom h2 { font-size: 14px; gap: 8px; }
+      .close-modal-btn { width: 30px; height: 30px; font-size: 13px; }
+      .info-summary-grid { padding: 12px 16px; }
+      .info-summary-item { font-size: 12px; }
+      .info-summary-item strong { min-width: 95px; font-size: 11px; }
+      .modal-subject-table-wrap { padding: 12px 16px 16px; }
+      .modal-subject-table thead th { padding: 8px 10px; font-size: 9px; letter-spacing: 0; }
+      .modal-subject-table tbody td { padding: 8px 10px; font-size: 11px; }
+      .modal-footer-custom { padding: 12px 16px; }
+      .modal-footer-custom button { padding: 6px 14px; font-size: 12px; }
+      .toast-msg {
+        padding: 12px 16px;
+        font-size: 13px;
+        bottom: 16px;
+        right: 16px;
+        left: 16px;
+      }
+    }
+
+    @media (max-width: 360px) {
+      .main-panel { padding: 10px 8px; }
+      table { min-width: 680px; width: auto; }
+      th { font-size: 9px; padding: 8px 6px; }
+      td { padding: 8px 6px; font-size: 10px; }
+      .action-icons i { width: 24px; height: 24px; font-size: 10px; }
+      .modal-header-custom h2 { font-size: 13px; }
+    }
+
+    /* ===== PRINT ===== */
+    @media print {
+      .action-icons,
+      .close-modal-btn,
+      .filter-section,
+      .modal-overlay,
+      .toast-msg {
+        display: none !important;
+      }
+      .data-card,
+      .page-header {
+        box-shadow: none;
+        border: 1px solid #ddd;
+      }
+      th {
+        background: #2563eb !important;
+        color: white !important;
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+      }
+      .table-wrapper { overflow: visible !important; }
+      table { min-width: 100% !important; width: 100% !important; }
+    }
+  </style>
+</head>
+<body>
+  <div id="header-placeholder"></div>
+
+  <div class="app-wrapper" id="appWrapper">
+    <div id="sidebar-placeholder"></div>
+
+    <div class="app-container">
+      <main class="main-panel">
+        <div class="page-header">
+          <h1><i class="fas fa-chart-bar"></i> Tests History</h1>
+          <p>View test marks entered by you, filtered by class, subject and assessment.</p>
+        </div>
+
+        <div class="data-card">
+          <div class="card-header">
+            <h2><i class="fas fa-table-list"></i> My Tests <span class="badge-count" id="recordCountBadge">0</span></h2>
+          </div>
+
+          <!-- Filter Section -->
+          <div class="filter-section">
+            <div class="filter-group">
+              <label><i class="fas fa-chalkboard"></i> Class</label>
+              <select id="classFilter" onchange="onClassChange()">
+                <option value="">-- All Classes --</option>
+              </select>
+            </div>
+
+            <div class="filter-group">
+              <label><i class="fas fa-book"></i> Subject</label>
+              <select id="subjectFilter" onchange="onSubjectChange()" disabled>
+                <option value="">-- Select Class First --</option>
+              </select>
+            </div>
+
+            <div class="filter-group">
+              <label><i class="fas fa-file-alt"></i> Assessment</label>
+              <select id="assessmentFilter" onchange="onAssessmentChange()" disabled>
+                <option value="">-- Select Subject First --</option>
+              </select>
+            </div>
+
+            <div class="filter-group" style="flex: 0 0 auto;">
+              <button class="filter-reset-btn" onclick="resetFilters()">
+                <i class="fas fa-undo"></i> Reset
+              </button>
+            </div>
+          </div>
+
+          <div class="table-wrapper">
+            <table>
+              <thead>
+                <tr>
+                  <th>Class Name</th>
+                  <th>Class ID</th>
+                  <th>Session</th>
+                  <th>Grade</th>
+                  <th>Section</th>
+                  <th>Assessment</th>
+                  <th>Date</th>
+                  <th>Total Students</th>
+                  <th>Percentage</th>
+                  <th style="text-align: right;">Actions</th>
+                </tr>
+              </thead>
+              <tbody id="resultsTableBody"></tbody>
+            </table>
+          </div>
+          <div id="noResultsMessage" style="display: none;">
+            <i class="fas fa-inbox"></i>
+            <p>No tests found</p>
+            <p>Try adjusting your filters</p>
+          </div>
+        </div>
+      </main>
+    </div>
+  </div>
+
+  <!-- MODAL overlay for student marks detail view -->
+  <div id="resultModalOverlay" class="modal-overlay">
+    <div class="class-modal-container">
+      <div class="modal-header-custom">
+        <h2 id="modalTitle"><i class="fas fa-clipboard-list"></i> Student Marks</h2>
+        <button class="close-modal-btn" id="closeModalBtn"><i class="fas fa-times"></i></button>
+      </div>
+      <div id="modalDynamicContent"></div>
+      <div class="modal-footer-custom">
+        <button id="modalFooterCloseBtn"><i class="fas fa-times"></i> Close</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="../components.js"></script>
+  <script>
+    // ===== Session Guard =====
+    function requireTeacherSession() {
+      const stored = localStorage.getItem('messCurrentUser');
+      const session = stored ? JSON.parse(stored) : null;
+      if (!session || session.role !== 'teacher') {
+        window.location.href = 'login.html';
+        return false;
+      }
+      return true;
+    }
+
+    function loadComponents() {
+      fetch('header.html').then(r => r.text()).then(data => document.getElementById('header-placeholder').innerHTML = data);
+      fetch('sidebar.html').then(r => r.text()).then(data => document.getElementById('sidebar-placeholder').innerHTML = data);
+    }
+
+    window.onload = function() {
+      if (!requireTeacherSession()) return;
+
+      loadComponents();
+      setTimeout(() => {
+        if (typeof window.initHeaderAndSidebar === 'function') window.initHeaderAndSidebar();
+      }, 400);
+
+      populateFilters();
+      applyFilters();
+    };
+
+    // ===== Storage Helpers =====
+    function loadFromStorage(key) {
+      const stored = localStorage.getItem(key);
+      return stored ? JSON.parse(stored) : [];
+    }
+    function saveToStorage(key, data) {
+      localStorage.setItem(key, JSON.stringify(data));
+    }
+
+    function showToast(msg, type = 'info') {
+      let t = document.createElement('div');
+      t.className = 'toast-msg';
+      const icon = type === 'success' ? 'fa-check-circle' : type === 'error' ? 'fa-exclamation-circle' : 'fa-info-circle';
+      t.innerHTML = `<i class="fas ${icon}"></i> ${msg}`;
+      t.style.borderLeft = `4px solid ${type === 'success' ? '#16a34a' : type === 'error' ? '#dc2626' : '#2563eb'}`;
+      document.body.appendChild(t);
+      setTimeout(() => t.remove(), 2400);
+    }
+
+    function escapeHtml(str) {
+      if (!str) return '';
+      return String(str).replace(/[&<>"']/g, m => ({
+        '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'
+      }[m]));
+    }
+
+    function calculatePercentage(obtained, total) {
+      if (!total || total === 0) return 0;
+      return Math.round((obtained / total) * 100);
+    }
+
+    function formatDisplayDate(dateStr) {
+      if (!dateStr) return '—';
+      const d = new Date(dateStr);
+      if (isNaN(d.getTime())) return dateStr;
+      return d.toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' });
+    }
+
+    function getCurrentTeacherRegNo() {
+      const session = JSON.parse(localStorage.getItem('messCurrentUser'));
+      return session ? session.regNo : null;
+    }
+
+    // ✅ Class cache for fallback lookup
+    let classLookupCache = null;
+
+    function buildClassLookup() {
+      if (classLookupCache) return classLookupCache;
+
+      const lookup = {};
+      const regularClasses = loadFromStorage('messClasses');
+      const makeupClasses = loadFromStorage('messMakeupClasses');
+
+      regularClasses.forEach(c => {
+        lookup[c.id] = {
+          session: c.session || '—',
+          grade: c.grade || '—',
+          section: c.section || '—'
+        };
+      });
+      makeupClasses.forEach(c => {
+        lookup[c.id] = {
+          session: c.session || '—',
+          grade: c.grade || '—',
+          section: c.section ? `Makeup (${c.section})` : `Makeup (${c.parentClassName || '—'})`
+        };
+      });
+
+      classLookupCache = lookup;
+      return lookup;
+    }
+
+    function getSessionGradeSection(record, lookup) {
+      const session = record.session || lookup[record.classId]?.session || '—';
+      const grade = record.grade || lookup[record.classId]?.grade || '—';
+      const section = record.section || lookup[record.classId]?.section || '—';
+      return { session, grade, section };
+    }
+
+    // ===== State =====
+    let allResults = [];
+    let filteredGroups = [];
+    let filterState = {
+      classId: '',
+      subjectName: '',
+      assessmentName: ''
+    };
+
+    // ===== Populate Filters =====
+    function populateFilters() {
+      const teacherRegNo = getCurrentTeacherRegNo();
+      if (!teacherRegNo) return;
+
+      allResults = loadFromStorage('messResults')
+        .filter(r => r.teacherRegNo === teacherRegNo);
+
+      const classes = [...new Set(allResults.map(r => r.classId))].sort();
+      const classSelect = document.getElementById('classFilter');
+      classSelect.innerHTML = '<option value="">-- All Classes --</option>';
+      classes.forEach(cls => {
+        classSelect.innerHTML += `<option value="${escapeHtml(cls)}">${escapeHtml(cls)}</option>`;
+      });
+
+      document.getElementById('subjectFilter').innerHTML = '<option value="">-- Select Class First --</option>';
+      document.getElementById('subjectFilter').disabled = true;
+      document.getElementById('assessmentFilter').innerHTML = '<option value="">-- Select Subject First --</option>';
+      document.getElementById('assessmentFilter').disabled = true;
+    }
+
+    // ===== On Class Change =====
+    window.onClassChange = function() {
+      const classId = document.getElementById('classFilter').value;
+      filterState.classId = classId;
+
+      const subjectSelect = document.getElementById('subjectFilter');
+      const assessmentSelect = document.getElementById('assessmentFilter');
+
+      if (!classId) {
+        subjectSelect.innerHTML = '<option value="">-- Select Class First --</option>';
+        subjectSelect.disabled = true;
+        assessmentSelect.innerHTML = '<option value="">-- Select Subject First --</option>';
+        assessmentSelect.disabled = true;
+        filterState.subjectName = '';
+        filterState.assessmentName = '';
+        applyFilters();
+        return;
+      }
+
+      const subjects = [...new Set(
+        allResults
+          .filter(r => r.classId === classId)
+          .map(r => r.subjectName)
+      )].sort();
+
+      subjectSelect.innerHTML = '<option value="">-- All Subjects --</option>';
+      subjects.forEach(sub => {
+        subjectSelect.innerHTML += `<option value="${escapeHtml(sub)}">${escapeHtml(sub)}</option>`;
+      });
+      subjectSelect.disabled = false;
+
+      assessmentSelect.innerHTML = '<option value="">-- Select Subject First --</option>';
+      assessmentSelect.disabled = true;
+      filterState.subjectName = '';
+      filterState.assessmentName = '';
+
+      applyFilters();
+    };
+
+    // ===== On Subject Change =====
+    window.onSubjectChange = function() {
+      const classId = document.getElementById('classFilter').value;
+      const subjectName = document.getElementById('subjectFilter').value;
+      filterState.subjectName = subjectName;
+
+      const assessmentSelect = document.getElementById('assessmentFilter');
+
+      if (!classId || !subjectName) {
+        assessmentSelect.innerHTML = '<option value="">-- Select Subject First --</option>';
+        assessmentSelect.disabled = true;
+        filterState.assessmentName = '';
+        applyFilters();
+        return;
+      }
+
+      const assessments = [...new Set(
+        allResults
+          .filter(r => r.classId === classId && r.subjectName === subjectName)
+          .map(r => r.name)
+      )].sort();
+
+      assessmentSelect.innerHTML = '<option value="">-- All Assessments --</option>';
+      assessments.forEach(ass => {
+        assessmentSelect.innerHTML += `<option value="${escapeHtml(ass)}">${escapeHtml(ass)}</option>`;
+      });
+      assessmentSelect.disabled = false;
+      filterState.assessmentName = '';
+
+      applyFilters();
+    };
+
+    // ===== On Assessment Change =====
+    window.onAssessmentChange = function() {
+      filterState.assessmentName = document.getElementById('assessmentFilter').value;
+      applyFilters();
+    };
+
+    // ===== Reset Filters =====
+    window.resetFilters = function() {
+      document.getElementById('classFilter').value = '';
+      document.getElementById('subjectFilter').innerHTML = '<option value="">-- Select Class First --</option>';
+      document.getElementById('subjectFilter').disabled = true;
+      document.getElementById('assessmentFilter').innerHTML = '<option value="">-- Select Subject First --</option>';
+      document.getElementById('assessmentFilter').disabled = true;
+
+      filterState = { classId: '', subjectName: '', assessmentName: '' };
+      applyFilters();
+    };
+
+    // ===== Apply Filters & Render =====
+    function applyFilters() {
+      const teacherRegNo = getCurrentTeacherRegNo();
+      if (!teacherRegNo) return;
+
+      classLookupCache = null;
+      const lookup = buildClassLookup();
+
+      let filtered = allResults;
+
+      if (filterState.classId) {
+        filtered = filtered.filter(r => r.classId === filterState.classId);
+      }
+      if (filterState.subjectName) {
+        filtered = filtered.filter(r => r.subjectName === filterState.subjectName);
+      }
+      if (filterState.assessmentName) {
+        filtered = filtered.filter(r => r.name === filterState.assessmentName);
+      }
+
+      // Group results (test-only: key no longer includes type)
+      const grouped = {};
+      filtered.forEach(r => {
+        const key = r.classId + '|' + r.name + '|' + r.date;
+        if (!grouped[key]) {
+          const meta = getSessionGradeSection(r, lookup);
+
+          grouped[key] = {
+            classId: r.classId,
+            className: r.className || '—',
+            session: meta.session,
+            grade: meta.grade,
+            section: meta.section,
+            assessmentName: r.name,
+            subjectName: r.subjectName || '—',
+            date: r.date,
+            results: []
+          };
+        }
+        grouped[key].results.push(r);
+      });
+
+      filteredGroups = Object.values(grouped).sort((a, b) => new Date(b.date) - new Date(a.date));
+      renderTable(filteredGroups);
+    }
+
+    // ===== Render External Table =====
+    function renderTable(dataToRender) {
+      const tbody = document.getElementById('resultsTableBody');
+      const noResults = document.getElementById('noResultsMessage');
+      if (!tbody) return;
+
+      document.getElementById('recordCountBadge').textContent = dataToRender.length;
+
+      if (dataToRender.length === 0) {
+        tbody.innerHTML = '';
+        noResults.style.display = 'block';
+        return;
+      }
+
+      noResults.style.display = 'none';
+
+      tbody.innerHTML = dataToRender.map((g, idx) => {
+        const total = g.results.length;
+        const totalMarks = g.results.reduce((sum, r) => sum + r.obtained, 0);
+        const maxMarks = g.results.reduce((sum, r) => sum + r.total, 0);
+        const avgPct = maxMarks > 0 ? Math.round((totalMarks / maxMarks) * 100) : 0;
+        const pctClass = avgPct >= 80 ? 'high' : avgPct >= 60 ? 'medium' : 'low';
+
+        return `
+          <tr>
+            <td><strong>${escapeHtml(g.className)}</strong></td>
+            <td>${escapeHtml(g.classId)}</td>
+            <td>${escapeHtml(g.session)}</td>
+            <td>${escapeHtml(g.grade)}</td>
+            <td>${escapeHtml(g.section)}</td>
+            <td><strong>${escapeHtml(g.assessmentName)}</strong></td>
+            <td>${escapeHtml(formatDisplayDate(g.date))}</td>
+            <td><span class="count-badge students-badge"><i class="fas fa-users"></i> ${total}</span></td>
+            <td><span class="pct-badge pct-${pctClass}">${avgPct}%</span></td>
+            <td style="text-align: right;">
+              <div class="action-icons">
+                <i class="fas fa-eye view-icon" data-groupindex="${idx}" title="View Students"></i>
+                <i class="fas fa-trash delete-icon" data-groupindex="${idx}" title="Delete Assessment"></i>
+              </div>
+            </td>
+          </tr>
+        `;
+      }).join('');
+
+      document.querySelectorAll('.view-icon').forEach(icon => {
+        icon.addEventListener('click', (e) => {
+          e.stopPropagation();
+          openResultDetail(parseInt(icon.dataset.groupindex, 10));
+        });
+      });
+
+      document.querySelectorAll('.delete-icon').forEach(icon => {
+        icon.addEventListener('click', (e) => {
+          e.stopPropagation();
+          deleteAssessmentGroup(parseInt(icon.dataset.groupindex, 10));
+        });
+      });
+    }
+
+    // ============================================
+    // DELETE — Entire Assessment Group
+    // ============================================
+    window.deleteAssessmentGroup = function(groupIndex) {
+      const g = filteredGroups[groupIndex];
+      if (!g) return;
+
+      const count = g.results.length;
+      const confirmMsg =
+        `Are you sure you want to delete this assessment?\n\n` +
+        `Assessment: ${g.assessmentName}\n` +
+        `Class: ${g.className} (${g.classId})\n` +
+        `Subject: ${g.subjectName}\n` +
+        `Students: ${count}\n\n` +
+        `This will permanently remove ${count} student test${count !== 1 ? 's' : ''}.`;
+
+      if (!confirm(confirmMsg)) return;
+
+      // Collect IDs to delete
+      const idsToDelete = new Set(g.results.map(r => r.id));
+
+      const allStored = loadFromStorage('messResults');
+      const remaining = allStored.filter(r => !idsToDelete.has(r.id));
+
+      saveToStorage('messResults', remaining);
+
+      showToast(`✅ Assessment deleted (${count} test${count !== 1 ? 's' : ''} removed)`, 'success');
+
+      // Refresh cache + UI
+      allResults = remaining.filter(r => r.teacherRegNo === getCurrentTeacherRegNo());
+      populateFilters();
+      applyFilters();
+    };
+
+    // ============================================
+    // VIEW MODAL — Student Marks
+    // ============================================
+    function openResultDetail(groupIndex) {
+      const g = filteredGroups[groupIndex];
+      if (!g) return;
+
+      const total = g.results.length;
+      const totalMarks = g.results.reduce((sum, r) => sum + r.obtained, 0);
+      const maxMarks = g.results.reduce((sum, r) => sum + r.total, 0);
+      const avgPct = maxMarks > 0 ? Math.round((totalMarks / maxMarks) * 100) : 0;
+
+      const rowsHtml = g.results.length
+        ? g.results.map((r, idx) => {
+            const pct = calculatePercentage(r.obtained, r.total);
+            const pctClass = pct >= 80 ? 'high' : pct >= 60 ? 'medium' : 'low';
+            return `
+              <tr data-result-id="${escapeHtml(r.id)}" data-group-idx="${groupIndex}" data-result-idx="${idx}">
+                <td class="idx-cell">${idx + 1}</td>
+                <td><strong>${escapeHtml(r.studentName)}</strong></td>
+                <td>${escapeHtml(r.regNo)}</td>
+                <td class="marks-cell">
+                  <div class="marks-display">
+                    <span class="marks-num">${r.obtained}/${r.total}</span>
+                  </div>
+                </td>
+                <td>
+                  <span class="pct-badge pct-${pctClass}">${pct}%</span>
+                </td>
+                <td style="text-align:center;">
+                  <div style="display:flex;justify-content:center;">
+                    <button class="edit-action-btn edit-btn-sm" onclick="editMarksInline(${groupIndex}, ${idx}, '${escapeHtml(r.id)}')">
+                      <i class="fas fa-pen"></i> Edit
+                    </button>
+                  </div>
+                </td>
+              </tr>
+            `;
+          }).join('')
+        : `
+          <tr>
+            <td colspan="6">
+              <div class="modal-empty-state">
+                <i class="fas fa-inbox"></i>
+                <p>No students in this test</p>
+              </div>
+            </td>
+          </tr>
+        `;
+
+      const modalContent = `
+        <div class="info-summary-grid">
+          <div class="info-summary-item"><strong><i class="fas fa-school"></i> Class:</strong> <span>${escapeHtml(g.className)} (${escapeHtml(g.classId)})</span></div>
+          <div class="info-summary-item"><strong><i class="fas fa-book"></i> Subject:</strong> <span>${escapeHtml(g.subjectName)}</span></div>
+          <div class="info-summary-item"><strong><i class="fas fa-file-alt"></i> Assessment:</strong> <span>${escapeHtml(g.assessmentName)}</span></div>
+          <div class="info-summary-item"><strong><i class="fas fa-calendar"></i> Date:</strong> <span>${escapeHtml(formatDisplayDate(g.date))}</span></div>
+          <div class="info-summary-item"><strong><i class="fas fa-calendar-alt"></i> Session:</strong> <span>${escapeHtml(g.session)}</span></div>
+          <div class="info-summary-item"><strong><i class="fas fa-users"></i> Total Students:</strong> <span><strong style="color:#2563eb;">${total}</strong></span></div>
+          <div class="info-summary-item"><strong><i class="fas fa-percentage"></i> Average:</strong> <span><strong style="color:#2563eb;">${avgPct}%</strong></span></div>
+        </div>
+        <div class="modal-subject-table-wrap">
+          <h4><i class="fas fa-clipboard-list"></i> Student Marks</h4>
+          <div class="table-wrapper" style="border:1.5px solid #e2e8f0;">
+            <table class="modal-subject-table">
+              <thead>
+                <tr>
+                  <th>#</th>
+                  <th>Student Name</th>
+                  <th>Reg No</th>
+                  <th>Marks</th>
+                  <th>Percentage</th>
+                  <th style="text-align:center;">Action</th>
+                </tr>
+              </thead>
+              <tbody>
+                ${rowsHtml}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      `;
+
+      document.getElementById('modalDynamicContent').innerHTML = modalContent;
+      document.getElementById('modalTitle').innerHTML =
+        `<i class="fas fa-clipboard-list"></i> ${escapeHtml(g.assessmentName)} — ${escapeHtml(g.className)}`;
+      document.getElementById('resultModalOverlay').classList.add('active');
+    }
+
+    function closeModal() {
+      document.getElementById('resultModalOverlay').classList.remove('active');
+    }
+
+    document.getElementById('closeModalBtn').addEventListener('click', closeModal);
+    document.getElementById('modalFooterCloseBtn').addEventListener('click', closeModal);
+    document.getElementById('resultModalOverlay').addEventListener('click', (e) => {
+      if (e.target === document.getElementById('resultModalOverlay')) closeModal();
+    });
+
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && document.getElementById('resultModalOverlay').classList.contains('active')) {
+        closeModal();
+      }
+    });
+
+    // ============================================
+    // INLINE EDIT (inside modal)
+    // ============================================
+    window.editMarksInline = function(groupIdx, resultIdx, resultId) {
+      const g = filteredGroups[groupIdx];
+      if (!g) return;
+
+      const r = g.results[resultIdx];
+      if (!r) return;
+
+      const row = document.querySelector(`tr[data-group-idx="${groupIdx}"][data-result-idx="${resultIdx}"]`);
+      if (!row) return;
+
+      const marksCell = row.querySelector('.marks-cell');
+      const actionCell = row.querySelector('td:last-child');
+      if (!marksCell || !actionCell) return;
+
+      const currentObtained = r.obtained;
+      const totalMarks = r.total;
+
+      marksCell.innerHTML = `
+        <div class="marks-display">
+          <input type="number" class="marks-input-edit" id="editMarks_${escapeHtml(resultId)}"
+                 value="${currentObtained}" min="0" max="${totalMarks}" step="1">
+          <span style="color:#94a3b8;font-weight:600;">/ ${totalMarks}</span>
+        </div>
+      `;
+
+      actionCell.innerHTML = `
+        <div style="display:flex;justify-content:center;gap:6px;flex-wrap:wrap;">
+          <button class="edit-action-btn save-btn-sm" onclick="saveMarksInline('${escapeHtml(resultId)}', ${groupIdx})">
+            <i class="fas fa-check"></i> Save
+          </button>
+          <button class="edit-action-btn cancel-btn-sm" onclick="cancelEditInline(${groupIdx})">
+            <i class="fas fa-times"></i> Cancel
+          </button>
+        </div>
+      `;
+
+      const input = document.getElementById(`editMarks_${resultId}`);
+      if (input) {
+        input.focus();
+        input.select();
+      }
+    };
+
+    window.saveMarksInline = function(resultId, groupIdx) {
+      const input = document.getElementById(`editMarks_${resultId}`);
+      if (!input) return;
+
+      const newObtained = parseFloat(input.value);
+
+      if (isNaN(newObtained) || newObtained < 0) {
+        showToast('⚠️ Please enter a valid number (0 or greater)', 'error');
+        return;
+      }
+
+      const results = loadFromStorage('messResults');
+      const resultIndex = results.findIndex(r => r.id === resultId);
+
+      if (resultIndex === -1) {
+        showToast('⚠️ Test not found', 'error');
+        return;
+      }
+
+      const result = results[resultIndex];
+
+      if (newObtained > result.total) {
+        showToast(`⚠️ Marks cannot exceed ${result.total}`, 'error');
+        return;
+      }
+
+      result.obtained = newObtained;
+      results[resultIndex] = result;
+      saveToStorage('messResults', results);
+
+      showToast('✅ Marks updated successfully!', 'success');
+
+      allResults = loadFromStorage('messResults').filter(r => r.teacherRegNo === getCurrentTeacherRegNo());
+
+      closeModal();
+      applyFilters();
+
+      setTimeout(() => {
+        const key = result.classId + '|' + result.name + '|' + result.date;
+        const newIdx = filteredGroups.findIndex(g =>
+          (g.classId + '|' + g.assessmentName + '|' + g.date) === key
+        );
+        if (newIdx !== -1) openResultDetail(newIdx);
+      }, 60);
+    };
+
+    window.cancelEditInline = function(groupIdx) {
+      closeModal();
+      setTimeout(() => {
+        if (filteredGroups[groupIdx]) openResultDetail(groupIdx);
+      }, 30);
+    };
+  </script>
+</body>
+</html>
