@@ -352,7 +352,7 @@
       color: #2563eb;
     }
 
-    /* ===== SUBJECT ROW - 3 COLUMNS (Name, Teacher, ID) ===== */
+    /* ===== SUBJECT ROW - 3 COLUMNS (Name, Teacher, Teacher Subjects) ===== */
     .subject-row {
       display: grid;
       grid-template-columns: 1.5fr 1.5fr 1fr auto;
@@ -412,6 +412,37 @@
 
     .btn-add i {
       color: #2563eb;
+    }
+
+    /* ===== Teacher Subjects Display (readonly tag list) ===== */
+    .teacher-subjects-display {
+      min-height: 48px;
+      padding: 8px 12px;
+      border: 1.5px solid #e2e8f0;
+      background: #f8fafc;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      align-items: center;
+    }
+
+    .teacher-subjects-display .empty-hint {
+      font-size: 13px;
+      color: #94a3b8;
+      font-style: italic;
+    }
+
+    .teacher-subjects-display .subj-chip {
+      display: inline-flex;
+      align-items: center;
+      background: #eef2ff;
+      color: #1e40af;
+      font-size: 12px;
+      font-weight: 600;
+      padding: 4px 10px;
+      border: 1px solid #dbeafe;
+      white-space: nowrap;
+      line-height: 1;
     }
 
     /* ===== BUTTONS ===== */
@@ -554,7 +585,7 @@
         grid-column: span 2;
       }
 
-      .subject-row .teacher-id-group {
+      .subject-row .teacher-subjects-group {
         grid-column: span 2;
       }
     }
@@ -612,7 +643,7 @@
       }
 
       .subject-row .teacher-search-wrap,
-      .subject-row .teacher-id-group {
+      .subject-row .teacher-subjects-group {
         grid-column: auto;
       }
 
@@ -807,6 +838,16 @@
         right: 16px;
         left: 16px;
       }
+
+      .teacher-subjects-display {
+        min-height: 44px;
+        padding: 6px 10px;
+      }
+
+      .teacher-subjects-display .subj-chip {
+        font-size: 11px;
+        padding: 3px 8px;
+      }
     }
 
     /* ===== EXTRA SMALL (360px and below) ===== */
@@ -863,6 +904,11 @@
         width: 30px;
         height: 30px;
         font-size: 14px;
+      }
+
+      .teacher-subjects-display .subj-chip {
+        font-size: 10.5px;
+        padding: 2px 6px;
       }
     }
 
@@ -1154,6 +1200,18 @@
       return teachersCache.find(t => t.regNo === regNo) || null;
     }
 
+    // Get teacher's subjects as an array (from enroll teacher data structure)
+    function getTeacherSubjects(teacher) {
+      if (!teacher) return [];
+      if (Array.isArray(teacher.subjects) && teacher.subjects.length > 0) {
+        return teacher.subjects.slice();
+      }
+      if (teacher.subjectsCanTeach) {
+        return teacher.subjectsCanTeach.split(',').map(s => s.trim()).filter(Boolean);
+      }
+      return [];
+    }
+
     // ===== Searchable Teacher Dropdown =====
     // Unique ID generator for each row instance
     let teacherDropdownCounter = 0;
@@ -1181,9 +1239,11 @@
             </div>
           </div>
         </div>
-        <div class="form-group teacher-id-group" style="margin-bottom:0">
-          <label><i class="fas fa-id-badge"></i> Teacher ID</label>
-          <input type="text" class="form-control teacher-id" disabled placeholder="Auto-filled">
+        <div class="form-group teacher-subjects-group" style="margin-bottom:0">
+          <label><i class="fas fa-book-reader"></i> Teacher's Subjects</label>
+          <div class="teacher-subjects-display">
+            <span class="empty-hint">Select a teacher to view subjects</span>
+          </div>
         </div>
         <button type="button" class="btn-remove" onclick="removeSubjectRow(this)"><i class="fas fa-times"></i></button>
       </div>`;
@@ -1262,6 +1322,21 @@
       }
     }
 
+    // Render the teacher's subjects inside the display box
+    function renderTeacherSubjectsInRow(row, teacher) {
+      const display = row.querySelector('.teacher-subjects-display');
+      if (!display) return;
+
+      const subjects = getTeacherSubjects(teacher);
+      if (subjects.length === 0) {
+        display.innerHTML = `<span class="empty-hint">No subjects listed for this teacher</span>`;
+        return;
+      }
+      display.innerHTML = subjects.map(s =>
+        `<span class="subj-chip">${escapeHtml(s)}</span>`
+      ).join('');
+    }
+
     // User picks a teacher from the list
     function selectTeacher(uid, regNo) {
       const wrap = document.getElementById(uid);
@@ -1279,11 +1354,10 @@
       // Store selected regNo on the wrapper (source of truth)
       wrap.dataset.selectedRegno = regNo;
 
-      // Sync the Teacher ID field in the same row
+      // Sync the Teacher's Subjects display field in the same row
       const row = wrap.closest('.subject-row');
       if (row) {
-        const idField = row.querySelector('.teacher-id');
-        if (idField) idField.value = teacher.regNo;
+        renderTeacherSubjectsInRow(row, teacher);
       }
 
       // Close the dropdown
