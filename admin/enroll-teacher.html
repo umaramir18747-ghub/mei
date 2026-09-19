@@ -808,6 +808,8 @@
                   id="subjectInput"
                   placeholder="Type subject & press Enter"
                   autocomplete="off"
+                  enterkeyhint="done"
+                  inputmode="text"
                 >
               </div>
               <input type="hidden" id="subjectsHidden" name="subjects">
@@ -1122,8 +1124,9 @@
         return;
       }
 
-      if (e.key === 'Enter' || e.key === ',') {
+      if (e.key === 'Enter' || e.key === ',' || e.keyCode === 13) {
         e.preventDefault();
+        e.stopPropagation();
         const val = input.value.trim();
         if (val) {
           addSubject(val);
@@ -1133,9 +1136,43 @@
       }
 
       // Backspace on empty input removes the last tag
-      if (e.key === 'Backspace' && input.value === '' && subjectsList.length > 0) {
+      if ((e.key === 'Backspace' || e.keyCode === 8) && input.value === '' && subjectsList.length > 0) {
         subjectsList.pop();
         renderSubjects();
+      }
+    });
+
+    // ✅ MOBILE FIX: handle Enter via keypress (some mobile browsers only fire this)
+    input.addEventListener('keypress', (e) => {
+      if (e.key === 'Enter' || e.keyCode === 13) {
+        e.preventDefault();
+        e.stopPropagation();
+        const val = input.value.trim();
+        if (val) {
+          addSubject(val);
+          input.value = '';
+        }
+      }
+    });
+
+    // ✅ MOBILE FIX: handle beforeinput for Android soft keyboards
+    input.addEventListener('beforeinput', (e) => {
+      if (e.inputType === 'insertLineBreak' || e.inputType === 'insertParagraph') {
+        e.preventDefault();
+        const val = input.value.trim();
+        if (val) {
+          addSubject(val);
+          input.value = '';
+        }
+      }
+    });
+
+    // ✅ MOBILE FIX: fallback — if the input loses focus and has text, add it as a tag
+    input.addEventListener('blur', () => {
+      const val = input.value.trim();
+      if (val) {
+        addSubject(val);
+        input.value = '';
       }
     });
 
@@ -1381,6 +1418,14 @@
     // Re-apply today's date after form reset
     setDefaultJoiningDate();
   }
+
+  // ✅ MOBILE FIX: Prevent Enter key inside subject input from submitting the form
+  document.getElementById('subjectInput').addEventListener('keydown', (e) => {
+    if (e.key === 'Enter' || e.keyCode === 13) {
+      e.preventDefault();
+      e.stopPropagation();
+    }
+  }, true); // use capture phase
 </script>
 </body>
 </html>
