@@ -399,24 +399,42 @@
       white-space: nowrap;
     }
 
+    /* ✅ MOBILE FIX: Tick button — proper tap target + no delay */
     .subject-tag .tag-remove {
       display: inline-flex;
       align-items: center;
       justify-content: center;
-      width: 16px;
-      height: 16px;
+      width: 22px;                /* ✅ bigger tap target for mobile */
+      height: 22px;
       border-radius: 50%;
-      background: rgba(255,255,255,0.25);
+      background: rgba(255,255,255,0.28);
       color: #fff;
-      font-size: 10px;
+      font-size: 11px;
       cursor: pointer;
       border: 0;
       padding: 0;
+      margin-left: 2px;
       transition: background 0.15s;
+      touch-action: manipulation; /* ✅ remove 300ms tap delay */
+      -webkit-tap-highlight-color: transparent; /* ✅ no blue flash on tap */
+      position: relative;          /* ✅ needed for z-index */
+      z-index: 5;                  /* ✅ stay above tag text */
+      pointer-events: auto;        /* ✅ always clickable */
+    }
+
+    .subject-tag .tag-remove i {
+      pointer-events: none;        /* ✅ taps pass through icon to button */
+      font-size: 10px;
+      line-height: 1;
     }
 
     .subject-tag .tag-remove:hover {
-      background: rgba(255,255,255,0.45);
+      background: rgba(255,255,255,0.5);
+    }
+
+    .subject-tag .tag-remove:active {
+      background: rgba(255,255,255,0.7);
+      transform: scale(0.92);
     }
 
     .subject-tag-input {
@@ -612,6 +630,17 @@
         font-size: 14px;
       }
 
+      /* ✅ MOBILE FIX: even bigger tick on mobile */
+      .subject-tag .tag-remove {
+        width: 26px;
+        height: 26px;
+        font-size: 12px;
+      }
+
+      .subject-tag .tag-remove i {
+        font-size: 11px;
+      }
+
       /* Toast */
       .toast-msg {
         bottom: 20px;
@@ -709,6 +738,11 @@
       .subject-tag-input {
         font-size: 13px;
         min-width: 80px;
+      }
+
+      .subject-tag .tag-remove {
+        width: 24px;
+        height: 24px;
       }
     }
 
@@ -872,7 +906,6 @@
   }
 
   // ================= AUTO FORMATTERS (hyphen insertion) =================
-  // Formats a phone number as XXXX-XXXXXXX (11 digits with hyphen after 4)
   function attachPhoneFormatter(inputId) {
     const input = document.getElementById(inputId);
     if (!input) return;
@@ -886,7 +919,6 @@
     });
   }
 
-  // Formats CNIC as XXXXX-XXXXXXX-X (13 digits, hyphens after 5 and 12)
   function attachCnicFormatter(inputId) {
     const input = document.getElementById(inputId);
     if (!input) return;
@@ -911,7 +943,6 @@
     const expInput = document.getElementById('experience');
     const expSuffix = document.getElementById('expSuffix');
 
-    // Show suffix if there's a value at load (e.g. edit mode)
     const syncSuffix = () => {
       if (expInput.value && expInput.value.trim() !== '') {
         expSuffix.classList.add('show');
@@ -920,29 +951,23 @@
       }
     };
 
-    // Numeric only, 0–99
     expInput.addEventListener('input', () => {
-      // Strip non-digits
       let v = expInput.value.replace(/\D/g, '');
-      // Max 2 digits
       if (v.length > 2) v = v.slice(0, 2);
-      // Clamp to 99 max
       if (v !== '' && parseInt(v, 10) > 99) v = '99';
       expInput.value = v;
       syncSuffix();
     });
 
-    // Block non-numeric keys at keydown for nicer UX
     expInput.addEventListener('keydown', (e) => {
       const allowed = ['Backspace','Delete','Tab','ArrowLeft','ArrowRight','Home','End','Enter'];
       if (allowed.includes(e.key)) return;
-      if (e.ctrlKey || e.metaKey) return;   // allow Ctrl+A/C/V etc.
+      if (e.ctrlKey || e.metaKey) return;
       if (!/^\d$/.test(e.key)) {
         e.preventDefault();
       }
     });
 
-    // Initial sync
     syncSuffix();
   }
 
@@ -953,25 +978,15 @@
       if (typeof window.initHeaderAndSidebar === 'function') window.initHeaderAndSidebar(); 
     }, 400);
 
-    // Initialize Registration Number system
     initRegNoField();
-
-    // Initialize Subject Tag Input
     initSubjectTagInput();
-
-    // Initialize Experience field
     initExperienceField();
-
-    // Attach auto-formatters for phone and CNIC fields
     attachPhoneFormatter('phone');
     attachCnicFormatter('cnic');
-
-    // Default Joining Date = today
     setDefaultJoiningDate();
 
     document.getElementById('teacherForm').addEventListener('submit', handleTeacherSubmit);
 
-    // Check for edit mode via URL param
     const params = new URLSearchParams(window.location.search);
     const editRegNo = params.get('edit');
     if (editRegNo) {
@@ -996,10 +1011,9 @@
     setTimeout(() => t.remove(), 2400);
   }
 
-  // ===== Reg No Generator: T.MEI-<lowername>-NNN =====
+  // ===== Reg No Generator =====
   function buildNameSlug(name) {
     if (!name || !name.trim()) return '';
-    // lowercase, remove anything that is not a-z or 0-9
     return name.trim().toLowerCase().replace(/[^a-z0-9]/g, '');
   }
 
@@ -1009,17 +1023,14 @@
   }
 
   function updateRegNo() {
-    if (editingRegNo) return;   // lock in edit mode
-
+    if (editingRegNo) return;
     const regNoInput = document.getElementById('regNo');
     const nameInput = document.getElementById('teacherName');
     const slug = buildNameSlug(nameInput.value);
-
     if (!slug) {
       regNoInput.value = 'T.MEI-';
       return;
     }
-
     const seq = String(getNextTeacherSeq()).padStart(3, '0');
     regNoInput.value = `T.MEI-${slug}-${seq}`;
   }
@@ -1027,11 +1038,7 @@
   function initRegNoField() {
     const regNoInput = document.getElementById('regNo');
     const nameInput = document.getElementById('teacherName');
-
-    // Initial state
     regNoInput.value = 'T.MEI-';
-
-    // Live-update regNo while typing teacher name (create mode only)
     nameInput.addEventListener('input', updateRegNo);
   }
 
@@ -1042,10 +1049,8 @@
     const wrap = document.getElementById('subjectTagWrap');
     const input = document.getElementById('subjectInput');
 
-    // Remove all existing tags
     wrap.querySelectorAll('.subject-tag').forEach(el => el.remove());
 
-    // Insert tags before the input
     subjectsList.forEach((subj, idx) => {
       const tag = document.createElement('span');
       tag.className = 'subject-tag';
@@ -1058,7 +1063,6 @@
       wrap.insertBefore(tag, input);
     });
 
-    // Sync hidden input value (comma-separated)
     document.getElementById('subjectsHidden').value = subjectsList.join(',');
   }
 
@@ -1075,24 +1079,20 @@
     if (!raw) return;
     const value = raw.trim();
     if (!value) return;
-
-    // Disallow spaces
     if (/\s/.test(value)) {
       showToast('⚠️ Spaces are not allowed in Subject. Use a single word or hyphen.');
       return;
     }
-
-    // Duplicate check (case-insensitive)
     if (subjectsList.some(s => s.toLowerCase() === value.toLowerCase())) {
       showToast(`⚠️ Subject "${value}" is already added`);
       return;
     }
-
     subjectsList.push(value);
     renderSubjects();
   }
 
   function removeSubject(index) {
+    if (index < 0 || index >= subjectsList.length) return;
     subjectsList.splice(index, 1);
     renderSubjects();
   }
@@ -1106,18 +1106,36 @@
       if (e.target === wrap) input.focus();
     });
 
-    // Handle tag removal via event delegation
-    wrap.addEventListener('click', (e) => {
-      const btn = e.target.closest('.tag-remove');
-      if (btn) {
-        e.preventDefault();
-        e.stopPropagation();
-        const idx = parseInt(btn.getAttribute('data-index'), 10);
+    // ✅ MOBILE FIX: Handle tag removal via pointerdown + click + touchstart
+    // pointerdown covers mouse + pen + touch on modern browsers
+    // touchstart is fallback for older mobile browsers
+    // click is final fallback for desktop
+    const handleRemoveTap = (e) => {
+      const target = e.target;
+      const btn = target.closest ? target.closest('.tag-remove') : null;
+      if (!btn) return;
+
+      e.preventDefault();
+      e.stopPropagation();
+
+      const idx = parseInt(btn.getAttribute('data-index'), 10);
+      if (!isNaN(idx)) {
         removeSubject(idx);
       }
-    });
+    };
 
-    // Prevent spaces from being typed at all
+    // Use pointerdown for fastest response (works on mobile + desktop)
+    wrap.addEventListener('pointerdown', handleRemoveTap, { passive: false });
+
+    // Fallback for browsers without PointerEvent
+    if (!window.PointerEvent) {
+      wrap.addEventListener('touchstart', handleRemoveTap, { passive: false });
+    }
+
+    // Final fallback — desktop click
+    wrap.addEventListener('click', handleRemoveTap);
+
+    // Prevent spaces from being typed
     input.addEventListener('keydown', (e) => {
       if (e.key === ' ') {
         e.preventDefault();
@@ -1135,14 +1153,13 @@
         return;
       }
 
-      // Backspace on empty input removes the last tag
       if ((e.key === 'Backspace' || e.keyCode === 8) && input.value === '' && subjectsList.length > 0) {
         subjectsList.pop();
         renderSubjects();
       }
     });
 
-    // ✅ MOBILE FIX: handle Enter via keypress (some mobile browsers only fire this)
+    // Mobile Enter via keypress
     input.addEventListener('keypress', (e) => {
       if (e.key === 'Enter' || e.keyCode === 13) {
         e.preventDefault();
@@ -1155,7 +1172,7 @@
       }
     });
 
-    // ✅ MOBILE FIX: handle beforeinput for Android soft keyboards
+    // Android soft keyboard beforeinput
     input.addEventListener('beforeinput', (e) => {
       if (e.inputType === 'insertLineBreak' || e.inputType === 'insertParagraph') {
         e.preventDefault();
@@ -1167,7 +1184,7 @@
       }
     });
 
-    // ✅ MOBILE FIX: fallback — if the input loses focus and has text, add it as a tag
+    // Blur fallback — add tag if input has text
     input.addEventListener('blur', () => {
       const val = input.value.trim();
       if (val) {
@@ -1176,14 +1193,13 @@
       }
     });
 
-    // Also strip spaces on paste
+    // Strip spaces on paste
     input.addEventListener('input', () => {
       if (/\s/.test(input.value)) {
         input.value = input.value.replace(/\s+/g, '');
       }
     });
 
-    // Initial render
     renderSubjects();
   }
 
@@ -1198,13 +1214,11 @@
 
     editingRegNo = regNo;
 
-    // Update page header
     document.getElementById('pageTitleText').textContent = 'Edit Teacher';
     document.getElementById('pageSubtitle').textContent = 'Update teacher details (Reg No. cannot be changed)';
     document.getElementById('submitBtn').innerHTML = '<i class="fas fa-save"></i> Update Teacher';
     document.getElementById('editLockNotice').style.display = 'inline-block';
 
-    // Lock regNo with the existing value
     const regNoInput = document.getElementById('regNo');
     regNoInput.value = teacher.regNo;
     regNoInput.readOnly = true;
@@ -1212,7 +1226,6 @@
     regNoInput.style.cursor = 'not-allowed';
     regNoInput.title = 'Registration Number cannot be changed';
 
-    // Fill personal info
     document.getElementById('teacherName').value = teacher.teacherName || '';
     document.getElementById('fatherName').value = teacher.fatherName || '';
     document.getElementById('phone').value = teacher.phoneNumber || '';
@@ -1224,26 +1237,20 @@
     document.getElementById('joiningDate').value = teacher.joiningDate || '';
     document.getElementById('address').value = teacher.address || '';
 
-    // Gender radio
     if (teacher.gender) {
       const genderRadio = document.querySelector(`input[name="gender"][value="${teacher.gender}"]`);
       if (genderRadio) genderRadio.checked = true;
     }
 
-    // Professional info
     document.getElementById('qualification').value = teacher.qualification || '';
     document.getElementById('prevSchool').value = teacher.previousSchool || '';
 
-    // Experience: extract numeric part only (strip "Years +" if legacy value contains it)
     const expVal = (teacher.experience || '').toString().replace(/[^\d]/g, '');
     document.getElementById('experience').value = expVal;
-    // Trigger suffix visibility update
     document.getElementById('experience').dispatchEvent(new Event('input'));
 
-    // Designation is now a text input
     document.getElementById('designation').value = teacher.designation || '';
 
-    // Subjects (array or comma-string)
     if (Array.isArray(teacher.subjects)) {
       subjectsList = teacher.subjects.slice();
     } else if (teacher.subjectsCanTeach) {
@@ -1253,7 +1260,6 @@
     }
     renderSubjects();
 
-    // Photo
     if (teacher.photoUrl) {
       photoPreview.src = teacher.photoUrl;
       photoFrame.classList.add('has-image');
@@ -1261,7 +1267,7 @@
     }
   }
 
-  // ===== Form Submission (CREATE + UPDATE) =====
+  // ===== Form Submission =====
   function handleTeacherSubmit(e) {
     e.preventDefault();
 
@@ -1285,7 +1291,6 @@
       const existing = teachers[idx];
       const genderInput = document.querySelector('input[name="gender"]:checked');
 
-      // Preserve immutable fields: regNo, password. Photo preserved if not changed.
       teachers[idx] = {
         ...existing,
         teacherName: teacherName,
@@ -1308,7 +1313,6 @@
         photoUrl: document.getElementById('photoPreview').src && document.getElementById('photoPreview').src.startsWith('data:')
           ? document.getElementById('photoPreview').src
           : existing.photoUrl
-        // regNo, password, status → preserved from existing
       };
 
       saveTeachers(teachers);
@@ -1321,7 +1325,6 @@
     }
 
     // ---------- CREATE MODE ----------
-    // Always regenerate regNo right before saving to guarantee latest sequence
     updateRegNo();
 
     const regNo = document.getElementById('regNo').value.trim();
@@ -1352,11 +1355,8 @@
       joiningDate: document.getElementById('joiningDate').value,
       address: document.getElementById('address').value.trim(),
       qualification: document.getElementById('qualification').value.trim(),
-
-      // Subject(s): store both an array and a comma-string for compatibility
       subjects: subjectsList.slice(),
       subjectsCanTeach: subjectsList.join(', '),
-
       previousSchool: document.getElementById('prevSchool').value.trim(),
       experience: document.getElementById('experience').value.trim(),
       designation: document.getElementById('designation').value.trim(),
@@ -1391,7 +1391,6 @@
   });
 
   function resetForm() {
-    // In edit mode, "Reset" cancels editing and goes back
     if (editingRegNo) {
       window.location.href = 'teacher-details.html';
       return;
@@ -1399,33 +1398,29 @@
 
     document.getElementById('teacherForm').reset();
 
-    // Reset Reg No with teacher prefix
     const regNoInput = document.getElementById('regNo');
     regNoInput.value = "T.MEI-";
 
-    // Reset subjects
     subjectsList = [];
     renderSubjects();
     document.getElementById('subjectInput').value = '';
 
-    // Hide the "Years +" suffix after reset
     document.getElementById('expSuffix').classList.remove('show');
 
     photoPreview.src = '';
     photoFrame.classList.remove('has-image');
     fileName.textContent = 'No file chosen';
 
-    // Re-apply today's date after form reset
     setDefaultJoiningDate();
   }
 
-  // ✅ MOBILE FIX: Prevent Enter key inside subject input from submitting the form
+  // Prevent Enter key inside subject input from submitting the form
   document.getElementById('subjectInput').addEventListener('keydown', (e) => {
     if (e.key === 'Enter' || e.keyCode === 13) {
       e.preventDefault();
       e.stopPropagation();
     }
-  }, true); // use capture phase
+  }, true);
 </script>
 </body>
 </html>
